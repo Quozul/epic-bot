@@ -1,0 +1,20 @@
+{
+    "token": "bot_token",
+    "prefix": "?",
+    "activity": {
+        "type": "STREAMING",
+        "url": "https://www.twitch.tv/quozul",
+        "value": "Utilisez ?help pour connaître la liste des commandes"
+    },
+    "bodyguard": {
+        "enabled": false,
+        "token": "bodyguard_token"
+    },
+    "command_cooldown": 5,
+    "mysql": {
+        "host": "localhost",
+        "user": "root",
+        "password": "root",
+        "database": "epic-bot"
+    }
+}
