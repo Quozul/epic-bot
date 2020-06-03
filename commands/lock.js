@@ -3,11 +3,11 @@ module.exports = {
     description: "Bloque l'accès à un channel vocal.",
     usage: '',
     arg_type: 'content',
-    execute(msg, content, connection) {
+    execute(msg, content, client) {
         const vc = msg.member.voice.channel
 
         if (!vc) throw `Vous devez être dans un salon vocal pour exécuter cette commande.`;
-        const results = connection.query(`select * from locked_voice_channel where id = '${vc.id}'`);
+        const results = client.connection.query(`select * from locked_voice_channel where id = '${vc.id}'`);
 
         if (!results.length != 0 && vc.userLimit != 0) throw 'Il y a déjà une limite imposée dans ce salon.';
 
@@ -21,6 +21,6 @@ module.exports = {
             msg.channel.send(`Le salon vocal \`${vc.name}\` est limité à ${mbr_count} utilisateurs.`);
         });
 
-        connection.query(`insert into locked_voice_channel(id) values ('${vc.id}')`);
+        client.connection.query(`insert into locked_voice_channel(id) values ('${vc.id}')`);
     }
 }

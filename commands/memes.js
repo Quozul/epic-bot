@@ -10,7 +10,7 @@ module.exports = {
         msg.channel.startTyping();
 
         utils.request('GET', 'https://www.reddit.com/r/memes/hot/.json?count=20').then((res) => {
-            const meme = utils.array_random(JSON.parse(res).data.children).data;
+            const meme = JSON.parse(res).data.children.random().data;
 
             const embed = new Discord.MessageEmbed()
                 .setColor('#0099ff')
@@ -22,8 +22,11 @@ module.exports = {
                 .setURL('https://redd.it/' + meme.id)
                 .setDescription('https://redd.it/' + meme.id);
 
-            msg.channel.stopTyping();
-            msg.channel.send(embed).catch(err => console.log(err));
+            msg.channel.send(embed)
+                .then(() => {
+                    msg.channel.stopTyping();
+                })
+                .catch(err => console.log(err));
         });
     }
 }
