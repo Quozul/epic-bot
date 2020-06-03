@@ -22,7 +22,7 @@ module.exports = {
             .setTitle(`${user.username}#${user.discriminator}`)
             .setFooter(msg.author.username, msg.author.avatarURL())
             .setTimestamp()
-            .setDescription('Information sur l\'utilisateur.')
+            .setDescription('Informations sur l\'utilisateur.')
             .setThumbnail(user.displayAvatarURL())
 
             .addFields(

@@ -1,9 +1,11 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 const https = require('https');
+const express = require('express');
 const mysql = require('sync-mysql');
 const utils = require('./utils');
 const client = new Discord.Client();
+const app = express();
 
 const config = JSON.parse(fs.readFileSync('config.json'));
 client.commands = new Discord.Collection();
@@ -168,7 +170,7 @@ client.on('message', msg => {
 
 
     // Remove innapropriate messages using bodyguard's api
-    if (config.bodyguard.enabled) {
+    if (config.bodyguard.enabled && msg.content.length > 3) {
         utils.request('POST', { hostname: 'api.bodyguard.ai', path: '/1.0/moderation' }, `{"text":"${msg.content}"}`, {
             'Authorization': config.bodyguard.token,
             'Content-Type': 'application/json'
@@ -238,10 +240,35 @@ client.on('guildMemberRemove', (member) => {
     member.guild.systemChannel.send(`<@${member.id}> nous a quitté :sob:`);
 });
 
-client.on('voiceStateUpdate', (oldMember, newMember) => {
+client.on('voiceStateUpdate', (o, n) => {
     // Execute custom events
     for (const event of client.events.filter(e => e.event === 'voiceStateUpdate').values())
-        event.execute(oldMember, newMember, client);
-})
+        event.execute(o, n, client);
+});
+
+client.on('guildUpdate', (o, n) => {
+    // Execute custom events
+    for (const event of client.events.filter(e => e.event === 'guildUpdate').values())
+        event.execute(o, n, client);
+});
 
 client.login(config.token);
+
+
+
+
+// Express stuff
+
+
+
+
+/*app.set('view engine', 'ejs');
+
+app.get('/', function (req, res, next) {
+    res.render('index', { query: req.query });
+});
+
+app.listen(8082, function () {
+    console.log('Running server on port 8082!');
+});
+*/
