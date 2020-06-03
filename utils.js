@@ -97,7 +97,6 @@ async function updateOrInsert(client, table = '`message_sent`', msg, count) {
 
 // for bot_interaction table
 async function updateOrInsertBotInteractions(client, table = '`bot_interaction`', msg, count) {
-    const date = new Date(msg.createdAt).format('%yyyy-%mm-%dd');
     const results = client.connection.query(`select * from ${table} where guild = ${msg.guild.id}`);
 
     if (results.length == 0)

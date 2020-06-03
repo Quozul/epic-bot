@@ -32,5 +32,14 @@ create table if not exists `bot_interaction` (
     guild varchar(18),
     amount int,
 
-    primary key(user, guild)
+    primary key(guild)
+);
+
+drop table if exists `settings`;
+create table if not exists `settings` (
+    guild varchar(18),
+    bodyguard boolean default false,
+    cooldown int default 5,
+
+    primary key(guild)
 );
