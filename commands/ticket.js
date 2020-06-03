@@ -24,6 +24,6 @@ module.exports = {
     usage: '',
     arg_type: 'none',
     execute(msg, args) {
-        msg.reply(t(utils.array_random(tickets_messages)));
+        msg.reply(t(tickets_messages.random()));
     }
 }

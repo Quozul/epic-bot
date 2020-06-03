@@ -27,7 +27,7 @@ for (const file of events) {
 }
 
 // MySQL stuff
-var connection = new mysql({
+client.connection = new mysql({
     host: config.mysql.host,
     user: config.mysql.user,
     password: config.mysql.password,
@@ -42,6 +42,10 @@ client.on('ready', () => {
     });
 });
 
+/**
+ * Creates and send an help message to the member's dms
+ * @param {*} msg 
+ */
 function helpCommand(msg) {
     const embed = new Discord.MessageEmbed()
         .setColor('#0099ff')
@@ -61,6 +65,10 @@ function helpCommand(msg) {
     msg.author.send(embed);
 }
 
+/**
+ * Execute a command from the given message
+ * @param {*} msg 
+ */
 function executeCommand(msg) {
     return new Promise((resolve, reject) => {
         const content = msg.content.substr(config.prefix.length, msg.content.length);
@@ -74,22 +82,18 @@ function executeCommand(msg) {
 
             try {
                 if (command.arg_type == 'quotes')
-                    command.execute(msg, utils.textInQuotes(content.substr(cmd.length, content.length)), connection);
+                    command.execute(msg, utils.textInQuotes(content.substr(cmd.length, content.length)), client);
                 else if (command.arg_type == 'content')
-                    command.execute(msg, content.substr(cmd.length, content.length), connection);
+                    command.execute(msg, content.substr(cmd.length, content.length), client);
                 else if (command.arg_type == 'none')
-                    command.execute(msg, '', connection);
+                    command.execute(msg, '', client);
                 else
-                    command.execute(msg, args, connection);
+                    command.execute(msg, args, client);
 
                 resolve();
             } catch (error) {
-                let c;
-
-                if (error == null) c = `Utilisation de la commande :\n> ${config.prefix}${cmd} ${command.usage}`;
-                else c = `Il y a eu une erreur dans l\'exécution de la commande !\n> ${error}`;
-
-                reject(c);
+                if (error == null) reject(`Utilisation de la commande :\n> ${config.prefix}${cmd} ${command.usage}`);
+                else reject(`Il y a eu une erreur dans l\'exécution de la commande !\n> ${error}`);
             }
 
         } else if (cmd == 'help') {
@@ -100,6 +104,10 @@ function executeCommand(msg) {
     });
 }
 
+/**
+ * Verify that the user didn't sent a command x seconds before
+ * @param {*} msg 
+ */
 function spamVerification(msg) {
     return new Promise((resolve, reject) => {
         const after_date = msg.createdAt.setSeconds(msg.createdAt.getSeconds() - config.command_cooldown);
@@ -115,16 +123,22 @@ function spamVerification(msg) {
 }
 
 client.on('message', msg => {
+    // If message is in dm or is not from a human, abort mission
     if (msg.author == client.user || msg.channel.type == 'dm') return;
-
 
     // Commands
 
+
     const isCommand = msg.content.startsWith(config.prefix) && msg.content.match(/[a-z]/);
-    if (isCommand)
+    if (isCommand) {
         spamVerification(msg)
-            .then(() => executeCommand(msg).catch((error) => { msg.reply(error) }))
+            .then(() => {
+                // Count executed commands
+                utils.updateOrInsertBotInteractions(client, 'bot_interaction', msg, 1);
+                executeCommand(msg).catch((error) => { msg.reply(error) });
+            })
             .catch((x) => {
+                // Send a message with cooldown before next command and edits it
                 msg.reply(`vous utilisez trop de commandes rapidement ! ${Math.floor(x / 1000)}s`).then((rep) => {
                     const i = setInterval(() => {
                         x -= 1000;
@@ -139,61 +153,43 @@ client.on('message', msg => {
 
                 msg.delete();
             });
-    else if (msg.mentions.has(client.user))
-        msg.channel.send(utils.array_random(mention_messages));
+    } else if (msg.mentions.has(client.user))
+        // Random message when bot is mentionned
+        msg.channel.send(mention_messages.random());
 
 
     // Score calculation
 
 
-    if (!isCommand) utils.updateOrInsert(connection, 'messages_sent', msg.author.id, msg.guild.id, 1);
+    if (!isCommand) utils.updateOrInsert(client, 'messages_sent', msg, 1);
 
 
     // Moderation stuff
 
 
+    // Remove innapropriate messages using bodyguard's api
     if (config.bodyguard.enabled) {
-        const options = {
-            hostname: 'api.bodyguard.ai',
-            port: 443,
-            path: '/1.0/moderation',
-            method: 'POST',
-            headers: {
-                'Authorization': config.bodyguard.token,
-                'Content-Type': 'application/json'
+        utils.request('POST', { hostname: 'api.bodyguard.ai', path: '/1.0/moderation' }, `{"text":"${msg.content}"}`, {
+            'Authorization': config.bodyguard.token,
+            'Content-Type': 'application/json'
+        }).then((body) => {
+            if (JSON.parse(body).haineux) {
+                msg.reply('ton message à été détecté comme innaproprié, il a été supprimé.');
+                msg.delete();
             }
-        };
-
-        const req = https.request(options, function (res) {
-            let body = '';
-
-            res.on('data', function (chunk) {
-                body = body + chunk;
-            });
-
-            res.on('end', function () {
-                if (JSON.parse(body).haineux) {
-                    msg.reply('ton message à été détecté comme innaproprié, il a été supprimé.');
-                    msg.delete();
-                }
-            });
-        });
-
-        req.write(`{"text":"${msg.content}"}`);
-        req.end();
-
-        req.on('error', function (e) {
-            console.error(e);
         });
     }
 });
 
+/**
+ * Get response message to a command (basically finds the next message from the bot following a specified message)
+ * @param {*} msg 
+ */
 function getBotResponse(msg) {
     return new Promise((resolve, reject) => {
         msg.channel.messages.fetch({ after: msg.id }).then((messages) => {
             Array.from(messages.values()).reverse().forEach(message => {
-                console.log(message.content);
-                if (message.author == client.user && message.mentions.has(msg.author))
+                if (message.author == client.user)
                     resolve(message);
             });
 
@@ -203,6 +199,7 @@ function getBotResponse(msg) {
 }
 
 client.on('messageUpdate', (old_message, msg) => {
+    // Handles command modification
     if (msg.content.startsWith(config.prefix)) {
 
         executeCommand(msg)
@@ -222,13 +219,18 @@ client.on('messageDelete', (msg) => {
     const isCommand = msg.content.startsWith(config.prefix) && msg.content.match(/[a-z]/);
 
     if (!isCommand) {
-        if (msg.author != client.user)
+        if (msg.author != client.user) {
+            // Log deletion to 'epic-logging' channel
             msg.guild.channels.cache.find(channel => channel.name == 'epic-logging').send(`Un message de <@${msg.author.id}> à été supprimé du salon <#${msg.channel.id}>\n> ${msg.content}`);
-        utils.updateOrInsert(connection, 'messages_sent', msg.author.id, msg.guild.id, -1);
+
+            // Removes 1 participation from the user
+            utils.updateOrInsert(client, 'messages_sent', msg, -1);
+        }
     }
 });
 
 client.on('guildMemberAdd', (member) => {
+    // Greets new members
     member.guild.systemChannel.send(`Bienvenue <@${member.id}> sur le serveur !`);
 });
 
@@ -237,8 +239,9 @@ client.on('guildMemberRemove', (member) => {
 });
 
 client.on('voiceStateUpdate', (oldMember, newMember) => {
+    // Execute custom events
     for (const event of client.events.filter(e => e.event === 'voiceStateUpdate').values())
-        event.execute(oldMember, newMember, connection);
+        event.execute(oldMember, newMember, client);
 })
 
 client.login(config.token);

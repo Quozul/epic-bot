@@ -12,7 +12,7 @@ module.exports = {
         msg.channel.startTyping();
 
         utils.request('GET', `https://www.reddit.com/r/${args[0]}/hot/.json?count=20`).then((res) => {
-            const post = utils.array_random(JSON.parse(res).data.children).data;
+            const post = JSON.parse(res).data.children.random().data;
 
             const embed = new Discord.MessageEmbed()
                 .setColor('#0099ff')

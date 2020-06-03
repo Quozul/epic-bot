@@ -9,8 +9,10 @@
   "author": "Quozul",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/opus": "^0.3.2",
     "discord.js": "^12.2.0",
     "mysql": "^2.18.1",
-    "sync-mysql": "^3.0.1"
+    "sync-mysql": "^3.0.1",
+    "ytdl-core": "^3.1.0"
   }
 }
