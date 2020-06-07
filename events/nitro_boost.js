@@ -36,6 +36,18 @@ module.exports = {
             .setTimestamp()
             .setDescription('```[' + str + ']```');
 
+        const boosters = newGuild.members.cache.filter((mbr) => mbr.premiumSinceTimestamp != null).sort((a, b) => a.premiumSinceTimestamp - b.premiumSinceTimestamp);
+
+        if (boosters.array().length > 0) {
+            str = '';
+            boosters.forEach(booster => {
+                str += `<@${booster.id}> depuis ${new Date(booster.premiumSinceTimestamp).toDateString()}\n`;
+            });
+
+            embed.addField('Boosteurs', str);
+        } else
+            embed.addField('Boosteurs', 'Personne n\'a boosté le serveur :cry:');
+
         newGuild.systemChannel.send(embed);
     }
 }

@@ -35,13 +35,16 @@ module.exports = {
             .setTimestamp()
             .setDescription('```\n[' + str + ']\n```');
 
-        str = '';
-        for (const booster of msg.guild.members.cache.filter((mbr) => mbr.premiumSinceTimestamp != null).sort((a, b) => a.premiumSinceTimestamp - b.premiumSinceTimestamp))
-            str += `<@${booster.id}> depuis ${booster.premiumSince.toDateString()}`;
+        const boosters = msg.guild.members.cache.filter((mbr) => mbr.premiumSinceTimestamp != null).sort((a, b) => a.premiumSinceTimestamp - b.premiumSinceTimestamp);
 
-        if (str != '')
+        if (boosters.array().length > 0) {
+            str = '';
+            boosters.forEach(booster => {
+                str += `<@${booster.id}> depuis ${new Date(booster.premiumSinceTimestamp).toDateString()}\n`;
+            });
+
             embed.addField('Boosteurs', str);
-        else
+        } else
             embed.addField('Boosteurs', 'Personne n\'a boosté le serveur :cry:');
 
         msg.channel.send(embed);
