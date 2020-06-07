@@ -237,7 +237,7 @@ client.on('guildMemberAdd', (member) => {
 });
 
 client.on('guildMemberRemove', (member) => {
-    member.guild.systemChannel.send(`<@${member.id}> nous a quitté :sob:`);
+    member.guild.systemChannel.send(`${member.user.username}#${member.user.discriminator} nous a quitté :sob:`);
 });
 
 client.on('voiceStateUpdate', (o, n) => {

@@ -19,7 +19,7 @@ module.exports = {
         const embed = new Discord.MessageEmbed()
             .setColor('#0099ff')
             .setTitle('Podium d\'activité du serveur')
-            .setDescription(`Podium des ${limit} utilisateurs actifs sur les ${args[0]} derniers jours`)
+            .setDescription(`Podium des ${limit} utilisateurs les plus actifs sur les ${args[0]} derniers jours`)
             .setFooter(msg.author.username, msg.author.avatarURL())
             .setTimestamp();
 

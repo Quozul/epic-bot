@@ -33,7 +33,16 @@ module.exports = {
             .setTitle('Progression du boost nitro')
             .setFooter(msg.author.username, msg.author.avatarURL())
             .setTimestamp()
-            .setDescription('`[' + str + ']`');
+            .setDescription('```\n[' + str + ']\n```');
+
+        str = '';
+        for (const booster of msg.guild.members.cache.filter((mbr) => mbr.premiumSinceTimestamp != null).sort((a, b) => a.premiumSinceTimestamp - b.premiumSinceTimestamp))
+            str += `<@${booster.id}> depuis ${booster.premiumSince.toDateString()}`;
+
+        if (str != '')
+            embed.addField('Boosteurs', str);
+        else
+            embed.addField('Boosteurs', 'Personne n\'a boosté le serveur :cry:');
 
         msg.channel.send(embed);
     }

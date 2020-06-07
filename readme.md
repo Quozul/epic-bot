@@ -14,8 +14,8 @@ Discord bot for my server. Currently, the bot is only in French but I'm planning
 * Boost progress bar on server boost
 * Record deleted messages into `epic-logging` channel
 * Anti vulgarity filter (French only)
-* Command cooldown
-* Edit commands
+* Command cooldown ![Command cooldown](assets/cooldown.gif)
+* Edit commands ![Command cooldown](assets/edit_command.gif)
 * Count messages sent by users
 * Automatically attribute active role(s)
 
