@@ -39,6 +39,7 @@ drop table if exists `settings`;
 create table if not exists `settings` (
     guild varchar(18),
     bodyguard boolean default false,
+    spam boolean default false,
     cooldown int default 5,
 
     primary key(guild)

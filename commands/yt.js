@@ -22,6 +22,8 @@ module.exports = {
                 .on('finish', () => {
                     connection.disconnect();
                 });
+        }).catch((err) => {
+            throw err;
         });
     }
 }

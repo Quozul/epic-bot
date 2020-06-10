@@ -11,6 +11,7 @@
         "token": "bodyguard_token"
     },
     "command_cooldown": 5,
+    "spam_protection": true,
     "mysql": {
         "host": "localhost",
         "user": "root",

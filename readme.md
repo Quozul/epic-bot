@@ -13,11 +13,12 @@ Discord bot for my server. Currently, the bot is only in French but I'm planning
 * Welcome and quit message
 * Boost progress bar on server boost
 * Record deleted messages into `epic-logging` channel
-* Anti vulgarity filter (French only)
+* Anti vulgarity filter **[Powered by Bodyguard](https://developers.bodyguard.ai/)** (French only)
 * Command cooldown ![Command cooldown](assets/cooldown.gif)
 * Edit commands ![Command cooldown](assets/edit_command.gif)
 * Count messages sent by users
 * Automatically attribute active role(s)
+* Spam protection
 
 ## Commands
 * Get random post from reddit `?reddit`
@@ -27,6 +28,7 @@ Discord bot for my server. Currently, the bot is only in French but I'm planning
 * See boost progress bar `?boost`
 * See informations about a user `?whois`
 * Play YouTube video in voice channel `?yt`
+* Leave the voice channel `?leave`
 
 #### Fun commands
 * Get a scratch ticket `?ticket`
@@ -35,3 +37,23 @@ Discord bot for my server. Currently, the bot is only in French but I'm planning
 * Create polls *admin* `?sondage`
 * Create announcement *admin* `?annonce`
 * Clear messages *admin* `?clear`
+
+## Config parameters
+Name | Description | Default value
+--- | --- | ---
+`token` | The token of your Discord application | none
+`prefix` | Prefix used for commands | `?`
+`command_cooldown` | Cooldown between sames messages and commands | `5`
+`spam_protection` | Toggles spam protection | `true`
+`activity` | |
+`activity.type` | The type of the activity, can be `PLAYING`, `WATCHING`, `LISTENING` or `STREAMING` | `STREAMING`
+`activity.url` | Only if `activity.type` is set to `STREAMING` | `https://www.twitch.tv/quozul`
+`activity.value` | The "game" the bot is playing | `Utilisez ?help pour connaître la liste des commandes`
+`bodyguard` | |
+`bodyguard.enabled` | Toggles bad words censorship (French only) | `false`
+`bodyguard.token` | Your Bodyguard token | none
+`mysql` | |
+`mysql.host` | The ip address where your database is hosted | `localhost`
+`mysql.user` | Username used to connect to your database | `root`
+`mysql.password` | Password used to connect to your database | `root`
+`mysql.database` | The name of the database used by the bot | `epic-bot`

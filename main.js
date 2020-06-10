@@ -110,18 +110,49 @@ function executeCommand(msg) {
  * Verify that the user didn't sent a command x seconds before
  * @param {*} msg 
  */
-function spamVerification(msg) {
+function spamVerification(msg, c, config) {
     return new Promise((resolve, reject) => {
-        const after_date = msg.createdAt.setSeconds(msg.createdAt.getSeconds() - config.command_cooldown);
+        if (config.spam_protection) {
+            const after_date = new Date(msg.createdAt.getTime() - config.command_cooldown * 1000);
+            const before = msg.createdAt;
 
-        msg.channel.messages.fetch({ before: msg.id }).then((messages) => {
-            for (const message of messages.values())
-                if (message.createdAt > after_date && message.author == msg.author && msg.content.startsWith(config.prefix) && msg.content.match(/[a-z]/))
-                    reject(new Date(message.createdAt.getTime() - after_date).getTime());
+            const messages = msg.channel.messages.cache.filter((m) => after_date < m.createdAt && m.createdAt < before && m.author == msg.author && m.content == msg.content);
+            const spam = messages.array().length > 0;
 
-            resolve();
-        });
+            if (spam) {
+
+                const x = config.command_cooldown * 1000 - (before.getTime() - messages.last().createdAt.getTime());
+
+                const a = msg.channel.messages.cache.filter((m) => after_date < m.createdAt && m.createdAt < before && m.author == client.user && m.content.match(c)).array().length > 0;
+
+                reject([x, a]);
+
+            }
+            else resolve();
+        }
+        else resolve();
     });
+}
+
+function spamMessage(msg, d, content) {
+    let x = d[0];
+
+    if (!d[1]) {
+        // Send a message with cooldown before next command and edits it
+        msg.channel.send(`${content} ${Math.floor(x / 1000)}s`).then((rep) => {
+            const i = setInterval(() => {
+                x -= 1000;
+                rep.edit(`${content} ${Math.floor(x / 1000)}s`);
+            }, 1000);
+
+            setTimeout(() => {
+                rep.delete();
+                clearInterval(i);
+            }, x);
+        });
+    }
+
+    msg.delete();
 }
 
 client.on('message', msg => {
@@ -130,34 +161,35 @@ client.on('message', msg => {
 
     // Commands
 
-
     const isCommand = msg.content.startsWith(config.prefix) && msg.content.match(/[a-z]/);
+
     if (isCommand) {
-        spamVerification(msg)
+
+        const content = `<@${msg.author.id}>, tu utilises trop de commandes rapidement, laisse-moi boire mon café :coffee: !`;
+        spamVerification(msg, content, config)
             .then(() => {
-                // Count executed commands
+
+                // Count executed commands then execute command
                 utils.updateOrInsertBotInteractions(client, 'bot_interaction', msg, 1);
                 executeCommand(msg).catch((error) => { msg.reply(error) });
+
             })
-            .catch((x) => {
-                // Send a message with cooldown before next command and edits it
-                msg.reply(`vous utilisez trop de commandes rapidement ! ${Math.floor(x / 1000)}s`).then((rep) => {
-                    const i = setInterval(() => {
-                        x -= 1000;
-                        rep.edit(`<@${msg.author.id}>, vous utilisez trop de commandes rapidement ! ${Math.floor(x / 1000)}s`)
-                    }, 1000);
+            .catch(d => spamMessage(msg, d, content));
 
-                    setTimeout(() => {
-                        rep.delete();
-                        clearInterval(i);
-                    }, x);
-                });
+    } else {
 
-                msg.delete();
-            });
-    } else if (msg.mentions.has(client.user))
-        // Random message when bot is mentionned
-        msg.channel.send(mention_messages.random());
+        const content = `<@${msg.author.id}>, tu envoies trop de messages rapidement !`;
+        spamVerification(msg, content, config)
+            .then(() => {
+
+                // Random message when bot is mentionned
+                if (msg.mentions.has(client.user))
+                    msg.channel.send(mention_messages.random());
+
+            })
+            .catch(d => spamMessage(msg, d, content));
+
+    }
 
 
     // Score calculation
@@ -170,7 +202,7 @@ client.on('message', msg => {
 
 
     // Remove innapropriate messages using bodyguard's api
-    if (config.bodyguard.enabled && msg.content.length > 3) {
+    if (config.bodyguard.enabled && msg.content.match(/[a-zA-Z]/) && !utils.is_url(msg.content)) {
         utils.request('POST', { hostname: 'api.bodyguard.ai', path: '/1.0/moderation' }, `{"text":"${msg.content}"}`, {
             'Authorization': config.bodyguard.token,
             'Content-Type': 'application/json'
@@ -181,6 +213,11 @@ client.on('message', msg => {
             }
         });
     }
+
+
+    // Execute custom events
+    for (const event of client.events.filter(e => e.event === 'message').values())
+        event.execute(message, client);
 });
 
 /**
