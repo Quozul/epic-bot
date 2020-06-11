@@ -15,8 +15,8 @@ module.exports = {
         else if (1 > i || i > 100)
             throw 'La valeur doit être comprise entre 1 et 100.';
         else {
-            msg.channel.bulkDelete(i + 1).then(() => {
-                msg.reply(`${content} messages supprimés du salon.`);
+            msg.channel.bulkDelete(Math.min(i + 1, 100)).then(() => {
+                msg.reply(`${Math.min(i + 1, 100)} messages supprimés du salon.`);
             });
         }
     }

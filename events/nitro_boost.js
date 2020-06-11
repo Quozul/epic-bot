@@ -1,10 +1,11 @@
 const Discord = require('discord.js');
+const utils = require('../utils');
 
 module.exports = {
     name: 'boost',
     event: 'guildUpdate',
-    description: "Affiche une barre de progression lorsque le serveur vient d'être boosté.",
-    execute(oldGuild, newGuild, client) {
+    description: "Displays a progress bar when the server gets boosted.",
+    execute(client, oldGuild, newGuild) {
         if (oldGuild.premiumSubscriptionCount != newGuild.premiumSubscriptionCount) return;
 
         const tiers = ['1️⃣', '2️⃣', '3️⃣'];
@@ -31,7 +32,7 @@ module.exports = {
 
         const embed = new Discord.MessageEmbed()
             .setColor('#0099ff')
-            .setTitle('Progression du boost nitro')
+            .setTitle(utils.getTranslation(client, msg.guild, 'nitro.title'))
             // .setFooter(msg.author.username, msg.author.avatarURL())
             .setTimestamp()
             .setDescription('```[' + str + ']```');
@@ -41,12 +42,12 @@ module.exports = {
         if (boosters.array().length > 0) {
             str = '';
             boosters.forEach(booster => {
-                str += `<@${booster.id}> depuis ${new Date(booster.premiumSinceTimestamp).toDateString()}\n`;
+                str += utils.getTranslation(client, msg.guild, 'nitro.booster_since', booster.id, new Date(booster.premiumSinceTimestamp).toDateString());
             });
 
-            embed.addField('Boosteurs', str);
+            embed.addField(utils.getTranslation(client, msg.guild, 'nitro.boosters'), str);
         } else
-            embed.addField('Boosteurs', 'Personne n\'a boosté le serveur :cry:');
+            embed.addField(utils.getTranslation(client, msg.guild, 'nitro.boosters'), utils.getTranslation(client, msg.guild, 'nitro.no_one'));
 
         newGuild.systemChannel.send(embed);
     }
