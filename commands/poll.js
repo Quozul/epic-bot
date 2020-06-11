@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const emojis = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
 
 module.exports = {
-    name: 'sondage',
+    name: 'poll',
     description: 'Créé un sondage.',
     usage: '["question"] <"reponse 1">...',
     arg_type: 'quotes',
@@ -10,8 +10,6 @@ module.exports = {
         if (!msg.member.permissions.has('ADMINISTRATOR')) throw "Vous n'avez pas la permission d'utiliser cette commande.";
         if (args.length < 1 || args[0] == '') throw null;
         else if (args.length == 2) throw "Quantité de réponse invalide.";
-
-        console.log(args.length);
 
         const e = new Discord.MessageEmbed()
             .setColor('#0099ff')

@@ -34,7 +34,7 @@ Discord bot for my server. Currently, the bot is only in French but I'm planning
 * Get a scratch ticket `?ticket`
 
 #### Admin commands
-* Create polls *admin* `?sondage`
+* Create polls *admin* `?poll`
 * Create announcement *admin* `?annonce`
 * Clear messages *admin* `?clear`
 
@@ -45,6 +45,7 @@ Name | Description | Default value
 `prefix` | Prefix used for commands | `?`
 `command_cooldown` | Cooldown between sames messages and commands | `5`
 `spam_protection` | Toggles spam protection | `true`
+`lang` | Sets the language of the bot | `english`
 `activity` | |
 `activity.type` | The type of the activity, can be `PLAYING`, `WATCHING`, `LISTENING` or `STREAMING` | `STREAMING`
 `activity.url` | Only if `activity.type` is set to `STREAMING` | `https://www.twitch.tv/quozul`

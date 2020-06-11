@@ -84,7 +84,29 @@ Date.prototype.format = function (str) {
         .replace('%dd', this.getDate().toString().padStart(2, '0'));
 }
 
-// for message_sent table
+/**
+ * Format a string
+ */
+String.prototype.format = function () {
+    const args = arguments;
+    return this.replace(/{([0-9]+)}/g, function (match, number) {
+        return typeof args[number] != 'undefined' ? args[number] : match;
+    });
+}
+
+/**
+ * Returns true if string is url
+ */
+String.prototype.isUrl = function () {
+    const regexp = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
+    return regexp.test(this);
+}
+
+
+// Bot utilities
+
+
+// For message_sent table
 async function updateOrInsert(client, table = '`message_sent`', msg, count) {
     const date = new Date(msg.createdAt).format('%yyyy-%mm-%dd');
     const results = client.connection.query(`select * from ${table} where user = ${msg.author.id} and guild = ${msg.guild.id} and date = '${date}'`);
@@ -95,7 +117,7 @@ async function updateOrInsert(client, table = '`message_sent`', msg, count) {
         client.connection.query(`update ${table} set amount = ${results[0].amount + count} where user = ${msg.author.id} and guild = ${msg.guild.id} and date = '${date}'`)
 }
 
-// for bot_interaction table
+// For bot_interaction table
 async function updateOrInsertBotInteractions(client, table = '`bot_interaction`', msg, count) {
     const results = client.connection.query(`select * from ${table} where guild = ${msg.guild.id}`);
 
@@ -105,16 +127,56 @@ async function updateOrInsertBotInteractions(client, table = '`bot_interaction`'
         client.connection.query(`update ${table} set amount = ${results[0].amount + count} where guild = ${msg.guild.id}`)
 }
 
-function is_url(str) {
-    regexp = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-    if (regexp.test(str))
-        return true;
-    else
-        return false;
+/**
+ * Returns translation
+ * @param {Client} client 
+ * @param {Guild} guild 
+ * @param {String} index
+ * @param {*} values
+ */
+function getTranslation(client, guild, index, ...values) {
+    return client.langs.get(client.config.lang)[index].format(...values);
+}
+
+/**
+ * Execute a command from the given message
+ * @param {Message} msg 
+ */
+function executeCommand(client, msg) {
+    return new Promise((resolve, reject) => {
+        const content = msg.content.substr(client.config.prefix.length, msg.content.length);
+        const args = content.split(/ +/);
+        const cmd = args.shift().toLowerCase();
+
+
+        if (client.commands.has(cmd)) {
+
+            const command = client.commands.get(cmd);
+
+            try {
+                if (command.arg_type == 'quotes')
+                    command.execute(msg, utils.textInQuotes(content.substr(cmd.length, content.length)), client);
+                else if (command.arg_type == 'content')
+                    command.execute(msg, content.substr(cmd.length, content.length), client);
+                else if (command.arg_type == 'none')
+                    command.execute(msg, '', client);
+                else
+                    command.execute(msg, args, client);
+
+                resolve();
+            } catch (error) {
+                if (error == null) reject(`Utilisation de la commande :\n> ${client.config.prefix}${cmd} ${command.usage}`);
+                else reject(`Il y a eu une erreur dans l\'exécution de la commande !\n> ${error}`);
+            }
+
+        } else
+            reject(`Command inconnue, \`${client.config.prefix}help\` pour obtenir la liste des commands.`);
+    });
 }
 
 exports.updateOrInsert = updateOrInsert;
 exports.updateOrInsertBotInteractions = updateOrInsertBotInteractions;
 exports.textInQuotes = quotes;
 exports.request = request;
-exports.is_url = is_url;
+exports.getTranslation = getTranslation;
+exports.executeCommand = executeCommand;
