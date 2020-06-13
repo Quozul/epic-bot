@@ -5,7 +5,7 @@ module.exports = {
     description: 'Affiche la liste des commandes ainsi que leur utilisation.',
     usage: '',
     arg_type: 'none',
-    execute(msg, args, client) {
+    execute(msg, args) {
         const embed = new Discord.MessageEmbed()
             .setColor('#0099ff')
             .setTitle('Liste des commandes')
@@ -13,8 +13,8 @@ module.exports = {
             .setTimestamp()
             .setDescription('Liste des commandes disponibles.');
 
-        for (const cmd of client.commands.values())
-            embed.addField(client.config.prefix + cmd.name + ' ' + cmd.usage, cmd.description);
+        for (const cmd of msg.client.commands.values())
+            embed.addField(msg.client.config.prefix + cmd.name + ' ' + cmd.usage, cmd.description);
 
         embed.addField('Lire les instructions des commandes', '[] : facultatif\n<> : obligatoire');
 

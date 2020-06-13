@@ -1,4 +1,9 @@
 const utils = require('../utils');
+const stringSimilarity = require('string-similarity');
+const java = require("java");
+java.classpath.push("french-sentences-gen-1.0.jar");
+
+const SentenceGenerator = java.newInstanceSync("fr.klemek.fsg.SentenceGenerator");
 
 /**
  * Verify that the user didn't sent a command x seconds before
@@ -10,7 +15,15 @@ function spamVerification(msg, c, client) {
             const after_date = new Date(msg.createdAt.getTime() - client.config.command_cooldown * 1000);
             const before = msg.createdAt;
 
-            const messages = msg.channel.messages.cache.filter((m) => after_date < m.createdAt && m.createdAt < before && m.author == msg.author && m.content == msg.content);
+            const messages = msg.channel.messages.cache.filter((m) =>
+                after_date < m.createdAt
+                && m.createdAt < before
+                && m.author == msg.author
+                && m.content == msg.content
+                && !m.deleted
+                && stringSimilarity.compareTwoStrings(m.content, msg.content) > .9
+            );
+
             const spam = messages.array().length > 0;
 
             if (spam) {
@@ -19,8 +32,7 @@ function spamVerification(msg, c, client) {
                 const a = msg.channel.messages.cache.filter((m) => after_date < m.createdAt && m.createdAt < before && m.author == client.user && m.content.match(c)).array().length > 0;
                 reject([x, a]);
 
-            }
-            else resolve();
+            } else resolve();
         }
         else resolve();
     });
@@ -69,7 +81,7 @@ module.exports = {
 
         if (isCommand) {
 
-            const content = utils.getTranslation(client, msg.guild, 'system.fast_commands', msg.author.id);
+            const content = utils.getTranslation(msg, 'system.fast_commands', msg.author.id);
             spamVerification(msg, content, client)
                 .then(() => {
 
@@ -84,13 +96,14 @@ module.exports = {
 
         } else {
 
-            const content = utils.getTranslation(client, msg.guild, 'system.fast_messages', msg.author.id);
+            const content = utils.getTranslation(msg, 'system.fast_messages', msg.author.id);
             spamVerification(msg, content, client)
                 .then(() => {
 
+                    const sentence = SentenceGenerator.generateSync();
                     // Random message when bot is mentionned
-                    if (msg.mentions.has(client.user))
-                        msg.channel.send(client.mentionReplies.random());
+                    if (client.config.replies && msg.mentions.has(client.user))
+                        msg.channel.send(Buffer.from(sentence, 'ascii').toString().replace('�', ''));
 
                 })
                 .catch(d => spamMessage(msg, d, content));

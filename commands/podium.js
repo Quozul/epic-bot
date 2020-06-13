@@ -6,7 +6,7 @@ module.exports = {
     description: "Affiche un podium des membres actifs.",
     usage: '[jours] [membres]',
     arg_type: 'args',
-    execute(msg, args, client) {
+    execute(msg, args) {
         msg.channel.startTyping();
 
         if (args[0] == undefined) args[0] = 7;
@@ -14,7 +14,7 @@ module.exports = {
         const limit = args[1] != undefined ? args[1] : 5;
         const after = new Date(new Date().getTime() - args[0] * 86400000).format('%yyyy-%mm-%dd');
 
-        const result = client.connection.query(`select user, sum(amount) as sum, count(date) as active_days from messages_sent where date in (select * from (select date from messages_sent where date > '${after}' group by date order by date desc) as t) and guild = '${msg.guild.id}' group by user order by sum desc limit ${limit};`);
+        const result = msg.client.connection.query(`select user, sum(amount) as sum, count(date) as active_days from messages_sent where date in (select * from (select date from messages_sent where date > '${after}' group by date order by date desc) as t) and guild = '${msg.guild.id}' group by user order by sum desc limit ${limit};`);
 
         const embed = new Discord.MessageEmbed()
             .setColor('#0099ff')
