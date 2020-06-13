@@ -5,7 +5,7 @@ module.exports = {
     description: 'Affiche des informations sur un utilisateur donné.',
     usage: '[mention d\'utilisateur]',
     arg_type: 'none',
-    execute(msg, content, client) {
+    execute(msg) {
         msg.channel.startTyping();
 
         let user;
@@ -15,7 +15,7 @@ module.exports = {
         else throw null;
 
         const member = msg.guild.member(user);
-        const result = client.connection.query(`select sum(amount) as sum, count(date) as active_days from messages_sent where user = '${member.user.id}' and guild = '${msg.guild.id}';`);
+        const result = msg.client.connection.query(`select sum(amount) as sum, count(date) as active_days from messages_sent where user = '${member.user.id}' and guild = '${msg.guild.id}';`);
 
         const embed = new Discord.MessageEmbed()
             .setColor(member.displayHexColor)

@@ -19,6 +19,7 @@ Discord bot for my server. Currently, the bot is only in French but I'm planning
 * Count messages sent by users
 * Automatically attribute active role(s)
 * Spam protection
+* Weird replies when mentionned **[Using FrenchSentencesGenerator](https://github.com/Klemek/FrenchSentencesGenerator)** (French only)
 
 ## Commands
 * Get random post from reddit `?reddit`
@@ -46,6 +47,7 @@ Name | Description | Default value
 `command_cooldown` | Cooldown between sames messages and commands | `5`
 `spam_protection` | Toggles spam protection | `true`
 `lang` | Sets the language of the bot | `english`
+`replies` | Send replies when mentionned (French only) | `true`
 `activity` | |
 `activity.type` | The type of the activity, can be `PLAYING`, `WATCHING`, `LISTENING` or `STREAMING` | `STREAMING`
 `activity.url` | Only if `activity.type` is set to `STREAMING` | `https://www.twitch.tv/quozul`

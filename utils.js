@@ -134,8 +134,8 @@ async function updateOrInsertBotInteractions(client, table = '`bot_interaction`'
  * @param {String} index
  * @param {*} values
  */
-function getTranslation(client, guild, index, ...values) {
-    return client.langs.get(client.config.lang)[index].format(...values);
+function getTranslation(msg, index, ...values) {
+    return msg.client.langs.get(msg.client.config.lang)[index].format(...values);
 }
 
 /**
@@ -155,13 +155,13 @@ function executeCommand(client, msg) {
 
             try {
                 if (command.arg_type == 'quotes')
-                    command.execute(msg, utils.textInQuotes(content.substr(cmd.length, content.length)), client);
+                    command.execute(msg, utils.textInQuotes(content.substr(cmd.length, content.length)));
                 else if (command.arg_type == 'content')
-                    command.execute(msg, content.substr(cmd.length, content.length), client);
+                    command.execute(msg, content.substr(cmd.length, content.length));
                 else if (command.arg_type == 'none')
-                    command.execute(msg, '', client);
+                    command.execute(msg);
                 else
-                    command.execute(msg, args, client);
+                    command.execute(msg, args);
 
                 resolve();
             } catch (error) {
@@ -170,7 +170,7 @@ function executeCommand(client, msg) {
             }
 
         } else
-            reject(`Command inconnue, \`${client.config.prefix}help\` pour obtenir la liste des commands.`);
+            reject(utils.getTranslation(msg, 'system.unknown_command', `${client.config.prefix}help`));
     });
 }
 

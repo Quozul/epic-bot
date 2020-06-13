@@ -11,7 +11,6 @@ client.config = JSON.parse(fs.readFileSync('config.json'));
 client.commands = new Discord.Collection();
 client.events = new Discord.Collection();
 client.langs = new Discord.Collection();
-client.mentionReplies = JSON.parse(fs.readFileSync('react_on_mentions.json'));
 
 // Load commands
 const commands = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
