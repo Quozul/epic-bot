@@ -102,6 +102,35 @@ String.prototype.isUrl = function () {
     return regexp.test(this);
 }
 
+String.prototype.replaceAll = function (search, replace) {
+    return this.split(search).join(replace);
+}
+
+function fixString(str) {
+    const c = [
+        ['Ã©', 'é'],
+        ['Ã¨', 'è'],
+        ['Ã ', 'à'],
+        ['Ã¯', 'ï'],
+        ['Ã´', 'ô'],
+        ['Ã§', 'ç'],
+        ['Ãª', 'ê'],
+        ['Ã¹', 'ù'],
+        ['Ã¦', 'æ'],
+        ['Å“', 'œ'],
+        ['Ã«', 'ë'],
+        ['Ã¼', 'ü'],
+        ['Ã¢', 'â'],
+        ['â¬', '€'],
+        ['Â©', '©'],
+        ['Â¤', '¤'],
+        ['Â', '']
+    ];
+    for (const a of c)
+        str = str.replaceAll(a[0], a[1]);
+    return str;
+}
+
 
 // Bot utilities
 
@@ -170,7 +199,7 @@ function executeCommand(client, msg) {
             }
 
         } else
-            reject(utils.getTranslation(msg, 'system.unknown_command', `${client.config.prefix}help`));
+            reject(getTranslation(msg, 'system.unknown_command', `${client.config.prefix}help`));
     });
 }
 
@@ -180,3 +209,4 @@ exports.textInQuotes = quotes;
 exports.request = request;
 exports.getTranslation = getTranslation;
 exports.executeCommand = executeCommand;
+exports.fixString = fixString;

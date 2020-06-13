@@ -100,10 +100,18 @@ module.exports = {
             spamVerification(msg, content, client)
                 .then(() => {
 
-                    const sentence = SentenceGenerator.generateSync();
                     // Random message when bot is mentionned
-                    if (client.config.replies && msg.mentions.has(client.user))
-                        msg.channel.send(Buffer.from(sentence, 'ascii').toString().replace('�', ''));
+                    if (client.config.replies && msg.mentions.has(client.user)) {
+                        let sentence = utils.fixString(SentenceGenerator.generateSync());
+
+                        msg.channel.startTyping();
+
+                        setTimeout(() => {
+                            msg.channel.send(sentence).then(() => {
+                                msg.channel.stopTyping();
+                            });
+                        }, sentence.length * 10);
+                    }
 
                 })
                 .catch(d => spamMessage(msg, d, content));
