@@ -37,10 +37,12 @@ create table if not exists `bot_interaction` (
 
 drop table if exists `settings`;
 create table if not exists `settings` (
-    guild varchar(18),
+    guild varchar(18) primary key,
+    
     bodyguard boolean default false,
     spam boolean default false,
     cooldown int default 5,
-
-    primary key(guild)
+    language char(2) default "en",
+    replies boolean default false,
+    prefix varchar(5) default "?",
 );

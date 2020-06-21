@@ -7,6 +7,7 @@ module.exports = {
     usage: '<(commands|events|config|all)>',
     arg_type: 'args',
     execute(msg, args, client) {
+        throw "Command broken.";
         if (!msg.member.permissions.has('ADMINISTRATOR')) throw "Vous n'avez pas la permission d'utiliser cette commande.";
         if (!['commands', 'events', 'config', 'all'].includes(args[0])) throw null;
 

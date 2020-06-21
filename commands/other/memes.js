@@ -1,9 +1,9 @@
 const Discord = require('discord.js');
-const utils = require('../utils');
+const utils = require('../../utils');
 
 module.exports = {
     name: 'meme',
-    description: 'Récupère un meme depuis /r/memes.',
+    description: 'Get a random meme from /r/memes sub-reddit.',
     usage: '',
     arg_type: 'none',
     execute(msg, args) {

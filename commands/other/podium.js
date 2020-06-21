@@ -1,13 +1,16 @@
 const Discord = require('discord.js');
-const utils = require('../utils');
+const utils = require('../../utils');
 
 module.exports = {
     name: 'podium',
-    description: "Affiche un podium des membres actifs.",
-    usage: '[jours] [membres]',
+    description: "Displays active members.",
+    usage: '[days] [member amount]',
     arg_type: 'args',
     execute(msg, args) {
         msg.channel.startTyping();
+        const client = msg.client;
+
+        if (args[0] != undefined && isNaN(args[0]) || args[1] != undefined && isNaN(args[1])) throw utils.getTranslation(client, msg.guild, 'podium.value_not_numeric');
 
         if (args[0] == undefined) args[0] = 7;
 
@@ -18,15 +21,21 @@ module.exports = {
 
         const embed = new Discord.MessageEmbed()
             .setColor('#0099ff')
-            .setTitle('Podium d\'activité du serveur')
-            .setDescription(`Podium des ${limit} utilisateurs les plus actifs sur les ${args[0]} derniers jours`)
+            .setTitle(utils.getTranslation(client, msg.guild, 'podium.title'))
+            .setDescription(utils.getTranslation(client, msg.guild, 'podium.description', limit, args[0]))
             .setFooter(msg.author.username, msg.author.avatarURL())
             .setTimestamp();
 
         const members = msg.guild.members.cache;
         result.forEach(row => {
             const member = msg.guild.members.cache.get(row.user);
-            embed.addField(member != undefined ? `${member.user.username}#${member.user.discriminator}` : 'Unknown', `${row.sum} messages envoyés sur ${row.active_days} jours actifs (${(row.active_days / args[0] * 100).toFixed(0)}%).\nMoyenne de ${(row.sum / args[0]).toFixed(2)} messages par jours.`);
+            embed.addField(
+                member != undefined ? `${member.user.username}#${member.user.discriminator}` : 'Unknown',
+                utils.getTranslation(
+                    client, msg.guild, 'podium.field',
+                    row.sum, row.active_days, (row.active_days / args[0] * 100).toFixed(0), (row.sum / args[0]).toFixed(2)
+                )
+            );
         });
 
         msg.channel.send(embed)

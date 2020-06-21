@@ -1,9 +1,9 @@
 const Discord = require('discord.js');
-const utils = require('../utils');
+const utils = require('../../utils');
 
 module.exports = {
     name: 'reddit',
-    description: 'Récupère un poste depuis sous-reddit.',
+    description: 'Get a random post from a given sub-reddit.',
     usage: '[sub-reddit]',
     arg_type: 'default',
     execute(msg, args) {
@@ -27,7 +27,7 @@ module.exports = {
             msg.channel.send(embed).catch(err => console.log(err));
         }).catch((err) => {
             msg.channel.stopTyping();
-            msg.channel.send('Une erreur est survenue, le sous-reddit existe-t-il ?');
+            msg.channel.send(utils.getTranslation(msg.client, msg.guild, 'reddit.error'));
         });
     }
 }

@@ -13,16 +13,16 @@ client.events = new Discord.Collection();
 client.langs = new Discord.Collection();
 
 // Load commands
-const commands = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const commands = utils.rreadDirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commands) {
-    const command = require(`./commands/${file}`);
+    const command = require(file);
     client.commands.set(command.name, command);
 }
 
 // Load events
-const events = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
+const events = utils.rreadDirSync('./events').filter(file => file.endsWith('.js'));
 for (const file of events) {
-    const event = require(`./events/${file}`);
+    const event = require(file);
     client.events.set(file, event);
 }
 
