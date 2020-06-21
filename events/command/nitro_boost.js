@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const utils = require('../utils');
+const utils = require('../../utils');
 
 module.exports = {
     name: 'boost',
@@ -32,7 +32,7 @@ module.exports = {
 
         const embed = new Discord.MessageEmbed()
             .setColor('#0099ff')
-            .setTitle(utils.getTranslation(msg, 'nitro.title'))
+            .setTitle(utils.getTranslation(client, msg.guild, 'nitro.title'))
             // .setFooter(msg.author.username, msg.author.avatarURL())
             .setTimestamp()
             .setDescription('```[' + str + ']```');
@@ -42,12 +42,12 @@ module.exports = {
         if (boosters.array().length > 0) {
             str = '';
             boosters.forEach(booster => {
-                str += utils.getTranslation(msg, 'nitro.booster_since', booster.id, new Date(booster.premiumSinceTimestamp).toDateString());
+                str += utils.getTranslation(client, msg.guild, 'nitro.booster_since', booster.id, new Date(booster.premiumSinceTimestamp).toDateString());
             });
 
-            embed.addField(utils.getTranslation(msg, 'nitro.boosters'), str);
+            embed.addField(utils.getTranslation(client, msg.guild, 'nitro.boosters'), str);
         } else
-            embed.addField(utils.getTranslation(msg, 'nitro.boosters'), utils.getTranslation(msg, 'nitro.no_one'));
+            embed.addField(utils.getTranslation(client, msg.guild, 'nitro.boosters'), utils.getTranslation(client, msg.guild, 'nitro.no_one'));
 
         newGuild.systemChannel.send(embed);
     }

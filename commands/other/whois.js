@@ -1,9 +1,10 @@
 const Discord = require('discord.js');
+const utils = require('../../utils');
 
 module.exports = {
     name: 'whois',
-    description: 'Affiche des informations sur un utilisateur donné.',
-    usage: '[mention d\'utilisateur]',
+    description: 'Displays information about a given user.',
+    usage: '[user mention]',
     arg_type: 'none',
     execute(msg) {
         msg.channel.startTyping();
@@ -22,16 +23,16 @@ module.exports = {
             .setTitle(`${user.username}#${user.discriminator}`)
             .setFooter(msg.author.username, msg.author.avatarURL())
             .setTimestamp()
-            .setDescription('Informations sur l\'utilisateur.')
+            .setDescription(utils.getTranslation(msg.client, msg.guild, 'whois.description'))
             .setThumbnail(user.displayAvatarURL())
 
             .addFields(
-                { name: 'ID', value: user.id },
-                { name: 'Roles', value: member.roles.cache.array().join(' ') },
-                { name: 'Création du compte', value: user.createdAt.toDateString() },
-                { name: 'A rejoint le serveur', value: member.joinedAt.toDateString() },
-                { name: 'Messages envoyés', value: result[0].sum, inline: true },
-                { name: 'Jours d\'activité', value: result[0].active_days, inline: true },
+                { name: utils.getTranslation(msg.client, msg.guild, 'whois.id'), value: user.id },
+                { name: utils.getTranslation(msg.client, msg.guild, 'whois.roles'), value: member.roles.cache.array().join(' ') },
+                { name: utils.getTranslation(msg.client, msg.guild, 'whois.account_creation'), value: user.createdAt.toDateString() },
+                { name: utils.getTranslation(msg.client, msg.guild, 'whois.server_joined'), value: member.joinedAt.toDateString() },
+                { name: utils.getTranslation(msg.client, msg.guild, 'whois.messages_sent'), value: result[0].sum, inline: true },
+                { name: utils.getTranslation(msg.client, msg.guild, 'whois.active_days'), value: result[0].active_days, inline: true },
             );
 
         msg.channel.send(embed)

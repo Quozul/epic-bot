@@ -1,4 +1,4 @@
-const utils = require('../utils');
+const utils = require('../../utils');
 
 /**
  * Get response message to a command (basically finds the next message from the bot following a specified message)

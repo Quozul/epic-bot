@@ -1,5 +1,8 @@
 # Epic-bot
-Discord bot for my server. Currently, the bot is only in French but I'm planning to translate it.
+Discord bot for my server. Currently, the bot is only in French but I'm planning to translate it.  
+If you wish to invite the bot, [here's an invite link](https://discord.com/oauth2/authorize?client_id=660424710021971988&scope=bot&permissions=8).  
+Feel free to open an issue or a pull request to request new features.  
+My Discord: `Quozul#1174`
 
 ## Installation
 * Clone the repository.
@@ -9,6 +12,13 @@ Discord bot for my server. Currently, the bot is only in French but I'm planning
 * Use `node main.js` to start the bot.
 * (Optionnal) Create a `epic-logging` channel for the bot to log stuff.
 
+## To do
+* Automatically attribute active role(s)
+* Config in database
+* Translate command desciprion and usage
+* Add command aliases
+* Website to configure the bot
+
 ## Features
 * Welcome and quit message
 * Boost progress bar on server boost
@@ -17,7 +27,6 @@ Discord bot for my server. Currently, the bot is only in French but I'm planning
 * Command cooldown ![Command cooldown](assets/cooldown.gif)
 * Edit commands ![Command cooldown](assets/edit_command.gif)
 * Count messages sent by users
-* Automatically attribute active role(s)
 * Spam protection
 * Weird replies when mentionned **[Using FrenchSentencesGenerator](https://github.com/Klemek/FrenchSentencesGenerator)** (French only)
 
@@ -30,9 +39,7 @@ Discord bot for my server. Currently, the bot is only in French but I'm planning
 * See informations about a user `?whois`
 * Play YouTube video in voice channel `?yt`
 * Leave the voice channel `?leave`
-
-#### Fun commands
-* Get a scratch ticket `?ticket`
+* Split users into teams `?teams`
 
 #### Admin commands
 * Create polls *admin* `?poll`

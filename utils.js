@@ -73,6 +73,39 @@ Array.prototype.random = function () {
 }
 
 /**
+ * Return a random element from a given array
+ * @returns {Array}
+ */
+Array.prototype.random = function () {
+    return this[Math.floor(Math.random() * this.length)];
+}
+
+/**
+ * Return a random element from a given array
+ * @returns {Array}
+ */
+Array.prototype.shuffle = function () {
+    let a = this;
+
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+
+    return a;
+}
+
+/**
+ * Random number between min and max
+ * @param min
+ * @param max
+ * @returns {Number}
+ */
+Math.rrandom = function (min, max) {
+    return Math.floor(Math.random() * max) + min;
+}
+
+/**
  * Format a given date
  * @param {Date} date 
  * @param {String} str
@@ -81,7 +114,10 @@ Array.prototype.random = function () {
 Date.prototype.format = function (str) {
     return str.replace('%yyyy', this.getFullYear())
         .replace('%mm', (this.getMonth() + 1).toString().padStart(2, '0'))
-        .replace('%dd', this.getDate().toString().padStart(2, '0'));
+        .replace('%dd', this.getDate().toString().padStart(2, '0'))
+        .replace('%hh', this.getHours().toString().padStart(2, '0'))
+        .replace('%mm', this.getMinutes().toString().padStart(2, '0'))
+        .replace('%ss', this.getSeconds().toString().padStart(2, '0'));
 }
 
 /**
@@ -104,6 +140,23 @@ String.prototype.isUrl = function () {
 
 String.prototype.replaceAll = function (search, replace) {
     return this.split(search).join(replace);
+}
+
+const fs = require('fs');
+
+function rreadDirSync(directory) {
+    let files = [];
+
+    fs.readdirSync(directory).forEach(file => {
+        const path = directory + '/' + file;
+        const stats = fs.statSync(path);
+        if (stats.isDirectory())
+            files = files.concat(rreadDirSync(path));
+        else
+            files.push(directory + '/' + file);
+    });
+
+    return files;
 }
 
 function fixString(str) {
@@ -163,8 +216,11 @@ async function updateOrInsertBotInteractions(client, table = '`bot_interaction`'
  * @param {String} index
  * @param {*} values
  */
-function getTranslation(msg, index, ...values) {
-    return msg.client.langs.get(msg.client.config.lang)[index].format(...values);
+function getTranslation(client, guild, index, ...values) {
+    const msg = client.langs.get(client.config.lang);
+    if (msg == undefined)
+        return "This message wasn't translated, sorry for the inconvenience";
+    return msg[index].format(...values);
 }
 
 /**
@@ -184,7 +240,7 @@ function executeCommand(client, msg) {
 
             try {
                 if (command.arg_type == 'quotes')
-                    command.execute(msg, utils.textInQuotes(content.substr(cmd.length, content.length)));
+                    command.execute(msg, quotes(content.substr(cmd.length, content.length)));
                 else if (command.arg_type == 'content')
                     command.execute(msg, content.substr(cmd.length, content.length));
                 else if (command.arg_type == 'none')
@@ -199,7 +255,7 @@ function executeCommand(client, msg) {
             }
 
         } else
-            reject(getTranslation(msg, 'system.unknown_command', `${client.config.prefix}help`));
+            reject(getTranslation(client, msg.guild, 'system.unknown_command', `${client.config.prefix}help`));
     });
 }
 
@@ -210,3 +266,4 @@ exports.request = request;
 exports.getTranslation = getTranslation;
 exports.executeCommand = executeCommand;
 exports.fixString = fixString;
+exports.rreadDirSync = rreadDirSync;

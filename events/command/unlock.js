@@ -1,7 +1,7 @@
 module.exports = {
     name: 'unlock',
     event: 'voiceStateUpdate',
-    description: "Restitue l'accès à un channel vocal bloqué.",
+    description: "Removes limit on locked voice channel.",
     execute(client, oldMember, newMember) {
         const vc = oldMember.channel;
         if (vc == null) return;

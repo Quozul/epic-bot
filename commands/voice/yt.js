@@ -2,13 +2,13 @@ const ytdl = require('ytdl-core');
 
 module.exports = {
     name: 'yt',
-    description: 'Joue une vidéo YouTube.',
+    description: 'Play a YouTube video in your voice channel.',
     usage: '<url>',
     arg_type: 'content',
     execute(msg, content) {
-        if (msg.member.voice.channel == undefined) throw 'Vous devez être dans un salon vocal pour exécuter cette commande.';
-        if (content == '') throw 'Merci de préciser un lien de vidéo YouTube.';
-        if (!ytdl.validateURL(content)) throw 'L\'URL n\'est pas valide.';
+        if (msg.member.voice.channel == undefined) throw utils.getTranslation(msg.client, msg.guild, 'system.no_voice');
+        if (content == '') throw utils.getTranslation(msg.client, msg.guild, 'yt.no_link');
+        if (!ytdl.validateURL(content)) throw utils.getTranslation(msg.client, msg.guild, 'yt.invalid');
 
 
         msg.member.voice.channel.join().then(async (connection) => {
@@ -16,7 +16,7 @@ module.exports = {
 
             connection.play(await ytdl(content))
                 .on('start', () => {
-                    msg.reply(`__${info.videoDetails.title}__ en cours de lecture...`);
+                    msg.reply(utils.getTranslation(msg.client, msg.guild, 'yt.playing', info.videoDetails.title));
                 })
 
                 .on('finish', () => {

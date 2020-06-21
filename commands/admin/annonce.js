@@ -1,12 +1,13 @@
 const Discord = require('discord.js');
+const utils = require('../../utils');
 
 module.exports = {
-    name: 'annonce',
-    description: 'Fait parler le bot.',
-    usage: '<"titre"> <"contenu">',
+    name: 'announcement',
+    description: 'Create an embed.',
+    usage: '<"title"> <"content">',
     arg_type: 'quotes',
     execute(msg, args) {
-        if (!msg.member.permissions.has('ADMINISTRATOR')) throw "Vous n'avez pas la permission d'utiliser cette commande.";
+        if (!msg.member.permissions.has('ADMINISTRATOR')) throw utils.getTranslation(client, msg.guild, 'system.no_permission_command');
         if (args.length < 2) throw null;
         msg.delete();
 

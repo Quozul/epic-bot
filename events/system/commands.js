@@ -1,4 +1,4 @@
-const utils = require('../utils');
+const utils = require('../../utils');
 const stringSimilarity = require('string-similarity');
 const java = require("java");
 java.classpath.push("french-sentences-gen-1.0.jar");
@@ -81,7 +81,7 @@ module.exports = {
 
         if (isCommand) {
 
-            const content = utils.getTranslation(msg, 'system.fast_commands', msg.author.id);
+            const content = utils.getTranslation(client, msg.guild, 'system.fast_commands', msg.author.id);
             spamVerification(msg, content, client)
                 .then(() => {
 
@@ -96,7 +96,7 @@ module.exports = {
 
         } else {
 
-            const content = utils.getTranslation(msg, 'system.fast_messages', msg.author.id);
+            const content = utils.getTranslation(client, msg.guild, 'system.fast_messages', msg.author.id);
             spamVerification(msg, content, client)
                 .then(() => {
 

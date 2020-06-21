@@ -1,19 +1,22 @@
 const Discord = require('discord.js');
+const utils = require('../../utils');
 const emojis = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
 
 module.exports = {
     name: 'poll',
-    description: 'Créé un sondage.',
-    usage: '["question"] <"reponse 1">...',
+    description: 'Create a poll.',
+    usage: '["question"] <"answer 1">...',
     arg_type: 'quotes',
     execute(msg, args) {
-        if (!msg.member.permissions.has('ADMINISTRATOR')) throw "Vous n'avez pas la permission d'utiliser cette commande.";
+        const client = msg.client;
+
+        if (!msg.member.permissions.has('ADMINISTRATOR')) throw utils.getTranslation(client, msg.guild, 'system.no_permission_command');
         if (args.length < 1 || args[0] == '') throw null;
-        else if (args.length == 2) throw "Quantité de réponse invalide.";
+        else if (args.length == 2) throw utils.getTranslation(client, msg.guild, 'poll.invalid_responses');
 
         const e = new Discord.MessageEmbed()
             .setColor('#0099ff')
-            .setTitle(`${msg.author.username} a créé un sondage`)
+            .setTitle(utils.getTranslation(client, msg.guild, 'poll.title', msg.author.username))
             .setFooter(msg.author.username, msg.author.avatarURL())
             .setTimestamp()
             .setDescription(args[0])
@@ -32,8 +35,8 @@ module.exports = {
                     );
             });
         } else {
-            e.addField('✔', 'Oui', true);
-            e.addField('❌', 'Non', true);
+            e.addField('✔', utils.getTranslation(client, msg.guild, 'poll.default_yes'), true);
+            e.addField('❌', utils.getTranslation(client, msg.guild, 'poll.default_no'), true);
 
             msg.channel.send(e).then(async m => {
                 await m.react('✔');

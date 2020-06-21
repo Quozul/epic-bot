@@ -5,6 +5,7 @@ module.exports = {
     event: 'message',
     description: "Remove innapropriate messages using Bodyguard's api (French only).",
     execute(client, msg) {
+        if (client.config.bodyguard && client.config.lang != 'fr') return;
 
         // Remove innapropriate messages using bodyguard's api
         if (client.config.bodyguard.enabled && msg.content.match(/[a-zA-Z]/) && !msg.content.isUrl()) {
