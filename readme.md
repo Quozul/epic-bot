@@ -1,6 +1,6 @@
 # Epic-bot
 Discord bot for my server. Currently, the bot is only in French but I'm planning to translate it.  
-If you wish to invite the bot, [here's an invite link](https://discord.com/oauth2/authorize?client_id=660424710021971988&scope=bot&permissions=8).  
+If you wish to invite the bot, [here's an invite link](https://discord.com/oauth2/authorize?client_id=660424710021971988&scope=bot&permissions=8) (the bot is currently configured for French).  
 Feel free to open an issue or a pull request to request new features.  
 My Discord: `Quozul#1174`
 
@@ -14,10 +14,23 @@ My Discord: `Quozul#1174`
 
 ## To do
 * Automatically attribute active role(s)
-* Config in database
-* Translate command desciprion and usage
 * Add command aliases
+* Config in database per servers
+    * Toggle features and commands
+    * Change language for the server
+    * Configure aliases (ex.: the alias `?hello` executes the command `?say Hello!`)
+    * Change command prefix
+* Translate command desciption and usage
 * Website to configure the bot
+* Display the reason for a member's departure
+* Music playlist
+* Controls music using reactions on message
+    *  Next, previous, pause, play and stop
+* More websites for musics
+* Self-roles assignation
+* Special perks for active servers
+    * Changing the bot's activity
+* Images in polls and announcements
 
 ## Features
 * Welcome and quit message
@@ -43,7 +56,7 @@ My Discord: `Quozul#1174`
 
 #### Admin commands
 * Create polls *admin* `?poll`
-* Create announcement *admin* `?annonce`
+* Create announcement *admin* `?announcement`
 * Clear messages *admin* `?clear`
 
 ## Config parameters
