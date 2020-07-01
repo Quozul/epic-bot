@@ -6,7 +6,7 @@ module.exports = {
     description: "Greets new users.",
     execute(client, member) {
 
-        member.guild.systemChannel.send(utils.getTranslation(member, 'system.greetings', member.id));
+        member.guild.systemChannel.send(utils.getTranslation(client, member.guild, 'system.greetings', member.id));
 
     }
 }

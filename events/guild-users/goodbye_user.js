@@ -6,7 +6,7 @@ module.exports = {
     description: "Sadness...",
     execute(client, member) {
 
-        member.guild.systemChannel.send(utils.getTranslation(member, 'system.goodbyes', member.user.username, member.user.discriminator));
+        member.guild.systemChannel.send(utils.getTranslation(client, member.guild, 'system.goodbyes', member.user.username, member.user.discriminator));
 
     }
 }
