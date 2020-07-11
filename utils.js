@@ -219,8 +219,14 @@ async function updateOrInsertBotInteractions(client, table = '`bot_interaction`'
 function getOption(client, guild, option) {
     const result = client.connection.query(`select value from \`guild_options\` where guild = ${guild.id} and name = '${option}'`)[0];
 
-    if (result != undefined) return result.value;
-    else if (result == undefined && client.config[option] != undefined) return client.config[option];
+    if (result != undefined) {
+        if (result.value === 'false' || result.value === 'true')
+            return result.value === 'true';
+        else if (/^\d+$/.test(result.value))
+            return parseInt(result.value);
+        else
+            return result.value;
+    } else if (result == undefined && client.config[option] != undefined) return client.config[option];
     else return null;
 }
 
