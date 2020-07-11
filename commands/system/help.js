@@ -17,7 +17,7 @@ module.exports = {
             .setDescription(utils.getTranslation(client, msg.guild, 'help.description'));
 
         for (const cmd of msg.client.commands.values())
-            embed.addField(msg.client.config.prefix + cmd.name + ' ' + cmd.usage, cmd.description);
+            embed.addField(utils.getOption(msg.client, msg.guild, 'prefix') + cmd.name + ' ' + cmd.usage, cmd.description);
 
         embed.addField(utils.getTranslation(client, msg.guild, 'help.end_field_title'), utils.getTranslation(client, msg.guild, 'help.end_field_content'));
 

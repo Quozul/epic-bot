@@ -19,11 +19,11 @@ function quotes(str) {
  * Make a https request
  * @param {String} method 
  * @param {String|Object} url 
- * @param {String} body 
+ * @param {String} reqbody 
  * @param {Object} headers
  * @returns {Promise}
  */
-function request(method, url, body = '', headers = {}) {
+function request(method, url, reqbody = '', headers = {}) {
     return new Promise((resolve, reject) => {
         let hostname, path;
         if (typeof url == 'string') {
@@ -44,18 +44,19 @@ function request(method, url, body = '', headers = {}) {
         };
 
         const req = https.request(options, (res) => {
-            let body = '';
+            let resbody = '';
 
             res.on('data', (chunk) => {
-                body = body + chunk;
+                resbody = resbody + chunk;
             });
 
             res.on('end', () => {
-                resolve(body);
+                console.log(resbody);
+                resolve(resbody);
             });
         });
 
-        req.write(body);
+        req.write(reqbody);
         req.end();
 
         req.on('error', (e) => {
@@ -210,14 +211,33 @@ async function updateOrInsertBotInteractions(client, table = '`bot_interaction`'
 }
 
 /**
+ * Return option
+ * @param {Guild} guild 
+ * @param {String} option 
+ * @returns {*} Option value
+ */
+function getOption(client, guild, option) {
+    const result = client.connection.query(`select value from \`guild_options\` where guild = ${guild.id} and name = '${option}'`)[0];
+
+    if (result != undefined) return result.value;
+    else if (result == undefined && client.config[option] != undefined) return client.config[option];
+    else return null;
+}
+
+/**
  * Returns translation
  * @param {Client} client 
  * @param {Guild} guild 
  * @param {String} index
  * @param {*} values
+ * @returns {String} translated text
  */
 function getTranslation(client, guild, index, ...values) {
-    const msg = client.langs.get(client.config.lang);
+    let lang = getOption(client, guild, 'lang');
+    lang = lang != null ? lang : 'en';
+
+    // If language is supported by the bot and the language is set in the config, else use english
+    const msg = client.langs.get(client.langs.has(lang) && lang != null ? lang : 'en');
     if (msg == undefined)
         return "This message wasn't translated, sorry for the inconvenience";
     return msg[index].format(...values);
@@ -229,7 +249,8 @@ function getTranslation(client, guild, index, ...values) {
  */
 function executeCommand(client, msg) {
     return new Promise((resolve, reject) => {
-        const content = msg.content.substr(client.config.prefix.length, msg.content.length);
+        const prefix = getOption(client, msg.guild, 'prefix');
+        const content = msg.content.substr(prefix.length, msg.content.length);
         const args = content.split(/ +/);
         const cmd = args.shift().toLowerCase();
 
@@ -239,23 +260,33 @@ function executeCommand(client, msg) {
             const command = client.commands.get(cmd);
 
             try {
-                if (command.arg_type == 'quotes')
-                    command.execute(msg, quotes(content.substr(cmd.length, content.length)));
-                else if (command.arg_type == 'content')
-                    command.execute(msg, content.substr(cmd.length, content.length));
-                else if (command.arg_type == 'none')
-                    command.execute(msg);
-                else
-                    command.execute(msg, args);
+                switch (command.arg_type) {
+                    case 'quotes':
+                        command.execute(msg, quotes(content.substr(cmd.length, content.length)));
+                        break;
+                    case 'content':
+                        command.execute(msg, content.substr(cmd.length, content.length));
+                        break;
+                    case 'none':
+                        command.execute(msg);
+                        break;
+
+                    default:
+                        command.execute(msg, args);
+                        break;
+                }
 
                 resolve();
             } catch (error) {
-                if (error == null) reject(`Utilisation de la commande :\n> ${client.config.prefix}${cmd} ${command.usage}`);
-                else reject(`Il y a eu une erreur dans l\'exécution de la commande !\n> ${error}`);
+                if (error == null) reject(getTranslation(client, msg.guild, 'system.command_usage', `${prefix}${cmd} ${command.usage}`));
+                else {
+                    console.log(error.stack);
+                    reject(getTranslation(client, msg.guild, 'system.command_error', error));
+                }
             }
 
         } else
-            reject(getTranslation(client, msg.guild, 'system.unknown_command', `${client.config.prefix}help`));
+            reject(getTranslation(client, msg.guild, 'system.unknown_command', `${prefix}help`));
     });
 }
 
@@ -267,3 +298,4 @@ exports.getTranslation = getTranslation;
 exports.executeCommand = executeCommand;
 exports.fixString = fixString;
 exports.rreadDirSync = rreadDirSync;
+exports.getOption = getOption;

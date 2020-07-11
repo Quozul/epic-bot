@@ -11,8 +11,8 @@ const SentenceGenerator = java.newInstanceSync("fr.klemek.fsg.SentenceGenerator"
  */
 function spamVerification(msg, c, client) {
     return new Promise((resolve, reject) => {
-        if (client.config.spam_protection) {
-            const after_date = new Date(msg.createdAt.getTime() - client.config.command_cooldown * 1000);
+        if (utils.getOption(client, msg.guild, 'spam_protection')) {
+            const after_date = new Date(msg.createdAt.getTime() - utils.getOption(client, msg.guild, 'command_cooldown') * 1000);
             const before = msg.createdAt;
 
             const messages = msg.channel.messages.cache.filter((m) =>
@@ -28,7 +28,7 @@ function spamVerification(msg, c, client) {
 
             if (spam) {
 
-                const x = client.config.command_cooldown * 1000 - (before.getTime() - messages.last().createdAt.getTime());
+                const x = utils.getOption(client, msg.guild, 'command_cooldown') * 1000 - (before.getTime() - messages.last().createdAt.getTime());
                 const a = msg.channel.messages.cache.filter((m) => after_date < m.createdAt && m.createdAt < before && m.author == client.user && m.content.match(c)).array().length > 0;
                 reject([x, a]);
 
@@ -77,7 +77,7 @@ module.exports = {
 
         // Commands
 
-        const isCommand = msg.content.startsWith(client.config.prefix) && msg.content.match(/[a-z]/);
+        const isCommand = msg.content.startsWith(utils.getOption(msg.client, msg.guild, 'prefix')) && msg.content.match(/[a-z]/);
 
         if (isCommand) {
 
@@ -88,7 +88,7 @@ module.exports = {
                     // Count executed commands then execute command
                     utils.updateOrInsertBotInteractions(client, 'bot_interaction', msg, 1);
                     utils.executeCommand(client, msg).catch((error) => {
-                        msg.reply(error)
+                        msg.reply(error);
                     });
 
                 })
@@ -101,7 +101,7 @@ module.exports = {
                 .then(() => {
 
                     // Random message when bot is mentionned
-                    if (client.config.replies && msg.mentions.has(client.user)) {
+                    if (utils.getOption(client, msg.guild, 'replies') && msg.mentions.has(client.user)) {
                         let sentence = utils.fixString(SentenceGenerator.generateSync());
 
                         msg.channel.startTyping();

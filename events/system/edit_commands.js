@@ -26,7 +26,7 @@ module.exports = {
         if (msg.author == client.user) return;
 
         // Handles command modification
-        if (msg.content.startsWith(client.config.prefix)) {
+        if (msg.content.startsWith(utils.getOption(client, msg.guild, 'prefix'))) {
 
             utils.executeCommand(client, msg)
                 .then(() => {

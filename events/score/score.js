@@ -9,7 +9,7 @@ module.exports = {
         // If message is in dm or is not from a human, abort mission
         if (msg.author == client.user || msg.channel.type == 'dm') return;
 
-        const isCommand = msg.content.startsWith(client.config.prefix) && msg.content.match(/[a-z]/);
+        const isCommand = msg.content.startsWith(utils.getOption(client, msg.guild, 'prefix')) && msg.content.match(/[a-z]/);
         if (!isCommand) {
             // Update score
             utils.updateOrInsert(client, 'messages_sent', msg, 1);
