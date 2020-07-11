@@ -8,7 +8,7 @@ module.exports = {
 
         if (msg.author == client.user) return;
 
-        const isCommand = msg.content.startsWith(client.config.prefix) && msg.content.match(/[a-z]/);
+        const isCommand = msg.content.startsWith(utils.getOption(client, msg.guild, 'prefix')) && msg.content.match(/[a-z]/);
 
         if (!isCommand) {
             // Log deletion to 'epic-logging' channel

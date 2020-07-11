@@ -35,14 +35,20 @@ create table if not exists `bot_interaction` (
     primary key(guild)
 );
 
-drop table if exists `settings`;
-create table if not exists `settings` (
-    guild varchar(18) primary key,
+drop table if exists `guild_options`;
+create table if not exists `guild_options` (
+    guild varchar(18),
+    name varchar(16),
+    value varchar(16),
     
-    bodyguard boolean default false,
-    spam boolean default false,
-    cooldown int default 5,
-    language char(2) default "en",
-    replies boolean default false,
-    prefix varchar(5) default "?",
+    primary key (guild, name)
+);
+
+drop table if exists `aliases`;
+create table if not exists `aliases` (
+    guild varchar(18),
+    command varchar(16),
+    alias varchar(16),
+    
+    primary key (guild, command)
 );

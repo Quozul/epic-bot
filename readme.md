@@ -22,7 +22,7 @@ My Discord: `Quozul#1174`
     * Change command prefix
 * Translate command desciption and usage
 * Website to configure the bot
-* Display the reason for a member's departure
+* ~~Display the reason for a member's departure~~ not possible
 * Music playlist
 * Controls music using reactions on message
     *  Next, previous, pause, play and stop
@@ -60,23 +60,22 @@ My Discord: `Quozul#1174`
 * Clear messages *admin* `?clear`
 
 ## Config parameters
-Name | Description | Default value
---- | --- | ---
-`token` | The token of your Discord application | none
-`prefix` | Prefix used for commands | `?`
-`command_cooldown` | Cooldown between sames messages and commands | `5`
-`spam_protection` | Toggles spam protection | `true`
-`lang` | Sets the language of the bot | `english`
-`replies` | Send replies when mentionned (French only) | `true`
+Name | Description | Default value | Per guild
+--- | --- | --- | ---
+`token` | The token of your Discord application | none | No
+`prefix` | Prefix used for commands | `?` | Yes
+`command_cooldown` | Cooldown between sames messages and commands | `5` | Yes
+`spam_protection` | Toggles spam protection | `true` | Yes
+`lang` | Sets the language of the bot | `english` | Yes
+`replies` | Send replies when mentionned (French only) | `true` | Yes
 `activity` | |
-`activity.type` | The type of the activity, can be `PLAYING`, `WATCHING`, `LISTENING` or `STREAMING` | `STREAMING`
-`activity.url` | Only if `activity.type` is set to `STREAMING` | `https://www.twitch.tv/quozul`
-`activity.value` | The "game" the bot is playing | `Utilisez ?help pour connaître la liste des commandes`
-`bodyguard` | |
-`bodyguard.enabled` | Toggles bad words censorship (French only) | `false`
-`bodyguard.token` | Your Bodyguard token | none
+`activity.type` | The type of the activity, can be `PLAYING`, `WATCHING`, `LISTENING` or `STREAMING` | `STREAMING` | No
+`activity.url` | Only if `activity.type` is set to `STREAMING` | `https://www.twitch.tv/quozul` | No
+`activity.value` | The "game" the bot is playing | `Utilisez ?help pour connaître la liste des commandes` | No
+`bodyguard` | Toggles bad words censorship (French only) | `false` | Yes
+`bodyguard_token` | Your Bodyguard token | none | No
 `mysql` | |
-`mysql.host` | The ip address where your database is hosted | `localhost`
-`mysql.user` | Username used to connect to your database | `root`
-`mysql.password` | Password used to connect to your database | `root`
-`mysql.database` | The name of the database used by the bot | `epic-bot`
+`mysql.host` | The ip address where your database is hosted | `localhost` | No
+`mysql.user` | Username used to connect to your database | `root` | No
+`mysql.password` | Password used to connect to your database | `root` | No
+`mysql.database` | The name of the database used by the bot | `epic-bot` | No
