@@ -1,6 +1,6 @@
 # Epic-bot
-Discord bot for my server. Currently, the bot is only in French but I'm planning to translate it.  
-If you wish to invite the bot, [here's an invite link](https://discord.com/oauth2/authorize?client_id=660424710021971988&scope=bot&permissions=8) (the bot is currently configured for French).  
+Discord bot for my server. You can change the bot's language using the command `?config lang fr`. Default language is English, supported languages are in the `lang` folder.  
+If you wish to invite the bot, [here's an invite link](https://discord.com/oauth2/authorize?client_id=660424710021971988&scope=bot&permissions=8) (the bot is running in English but can be changed to any languages that are in the `lang` folder).  
 Feel free to open an issue or a pull request to request new features.  
 My Discord: `Quozul#1174`
 
