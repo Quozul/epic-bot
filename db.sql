@@ -52,3 +52,19 @@ create table if not exists `aliases` (
     
     primary key (guild, command)
 );
+
+drop table if exists `disabled_commands`;
+create table if not exists `disabled_commands` (
+    guild varchar(18),
+    command varchar(16),
+    
+    primary key (guild, command)
+);
+
+drop table if exists `disabled_events`;
+create table if not exists `disabled_events` (
+    guild varchar(18),
+    event varchar(16),
+    
+    primary key (guild, event)
+);
