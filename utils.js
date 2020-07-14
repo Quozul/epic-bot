@@ -51,7 +51,6 @@ function request(method, url, reqbody = '', headers = {}) {
             });
 
             res.on('end', () => {
-                console.log(resbody);
                 resolve(resbody);
             });
         });
