@@ -1,0 +1,26 @@
+<header>
+
+    <%
+    let connected = false;
+    if (session.discord != undefined && session.discord.access_token != undefined && Date.now() < session.discord.expires_at)
+        connected = true;
+    %>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item <%= path == '/' ? 'active' : '' %>"><a <%= path != '/' ? 'href=/' : '' %>>Home</a></li>
+
+            <li class="breadcrumb-item <%= path == '/connect' ? 'active' : '' %>">
+                <% if (!connected) { %>
+                <a <%= path != '/connect' ? 'href=/connect' : '' %>>Connect to Discord</a>
+                <% } else { %>
+                <a <%= path != '/disconnect' ? 'href=/disconnect' : '' %>>Disconnect from Discord</a>
+                <% } %>
+            </li>
+
+            <li class="breadcrumb-item <%= path == '/select' ? 'active' : '' %>"><a <%= path != '/select' && connected ? 'href=/select' : '' %>>Select a guild</a></li>
+            <li class="breadcrumb-item <%= path == '/guild' ? 'active' : '' %>">Change settings</li>
+        </ol>
+    </nav>
+
+</header>

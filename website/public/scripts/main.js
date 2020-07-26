@@ -16,7 +16,7 @@ function save() {
                             value: field.value, token: token
                         })
                     }
-                ).catch(console.log);
+                ).catch((err) => console.log(err));
         });
 }
 
@@ -29,12 +29,12 @@ function setSettingValue() {
             const element = inputs[key];
 
             fetch(`/api/setting/${guild}/${element.id}`)
-                .then(res => res.json())
+                .then(res => res.text())
                 .then(value => {
-                    if (value === true || value === false)
-                        element.checked = value;
-                    else
-                        element.value = value;
+                    if (value == 'true' || value == 'false')
+                        element.checked = value === 'true';
+
+                    element.value = value;
                 });
         }
     }
