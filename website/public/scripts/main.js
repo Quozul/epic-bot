@@ -65,21 +65,21 @@ function getGuilds() {
                                     const row = document.createElement('tr');
                                     row.innerHTML =
                                         `<td>
-                                            <img src="https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png" class="guild-icon">
+                                            <img src="https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png" class="guild-icon rounded-circle align-middle">
                                         </td>
-                                        <td>
+                                        <td class="align-middle">
                                             ${guild.name}
                                         </td>`
 
                                     if (isIn)
                                         row.innerHTML +=
                                             `<td>
-                                                <a class="btn btn-primary" href="/guild/${guild.id}">Select</a>
+                                                <a class="btn btn-primary w-100 align-middle" href="/guild/${guild.id}">Select</a>
                                             </td>`
                                     else
                                         row.innerHTML +=
                                             `<td>
-                                                <a class="btn btn-secondary" href="https://discord.com/oauth2/authorize?client_id=660424710021971988&scope=bot&permissions=8">Invite</a>
+                                                <a class="btn btn-secondary w-100 align-middle" href="https://discord.com/oauth2/authorize?client_id=660424710021971988&scope=bot&permissions=8">Invite</a>
                                             </td>`
 
 

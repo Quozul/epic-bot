@@ -1,4 +1,4 @@
-<header>
+<header class="mb-3 p-4">
 
     <%
     let connected = false;
@@ -7,7 +7,7 @@
     %>
 
     <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
+        <ol class="breadcrumb m-0 p-0">
             <li class="breadcrumb-item <%= path == '/' ? 'active' : '' %>"><a <%= path != '/' ? 'href=/' : '' %>>Home</a></li>
 
             <li class="breadcrumb-item <%= path == '/connect' ? 'active' : '' %>">
@@ -19,7 +19,7 @@
             </li>
 
             <li class="breadcrumb-item <%= path == '/select' ? 'active' : '' %>"><a <%= path != '/select' && connected ? 'href=/select' : '' %>>Select a guild</a></li>
-            <li class="breadcrumb-item <%= path == '/guild' ? 'active' : '' %>">Change settings</li>
+            <li class="breadcrumb-item <%= path.includes('/guild') ? 'active' : '' %>">Change settings</li>
         </ol>
     </nav>
 

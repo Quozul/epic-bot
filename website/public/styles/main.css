@@ -1,4 +1,27 @@
 .guild-icon {
-    border-radius: 100%;
     height: 38px;
+}
+
+body {
+    background-color: #2C2F33;
+    color: #ffffff
+}
+
+.jumbotron,
+.breadcrumb,
+footer,
+header {
+    background-color: #23272A;
+}
+
+.btn-primary {
+    background-color: #7289DA;
+}
+
+.btn-secondary {
+    background-color: #99AAB5;
+}
+
+a {
+    color: #7289DA;
 }
