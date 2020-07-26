@@ -5,6 +5,7 @@ const app = express();
 const session = require('express-session');
 const fetch = require('node-fetch');
 const bodyParser = require('body-parser');
+const utils = require('./utils');
 
 // Load bot's config
 const config = JSON.parse(fs.readFileSync('../config.json'));
@@ -26,6 +27,12 @@ app.use(session({
 }));
 app.use(bodyParser.json());
 
+app.use((req, res, next) => {
+    res.locals.path = req.path;
+    res.locals.session = req.session;
+    next();
+});
+
 app.get('/', function (req, res, next) {
     res.render('index');
 });
@@ -34,6 +41,23 @@ app.get('/', function (req, res, next) {
 // Button to connect to Discord oauth
 app.get('/connect', function (req, res, next) {
     res.render('connect', { oauth_url: config.website.oauth_url });
+});
+
+// Revoke token
+app.get('/disconnect', function (req, res, next) {
+    const sd = req.session.discord;
+    if (sd == undefined || sd.access_token == undefined || Date.now() > sd.expires_at)
+        res.redirect('/connect');
+    else
+        fetch('https://discord.com/api/oauth2/token/revoke', {
+            method: 'post',
+            headers: { 'content-type': 'application/x-www-form-urlencoded' },
+            body: `token=${sd.access_token}&client_id=${config.website.client_id}&client_secret=${config.website.client_secret}`
+        })
+            .then(response => {
+                req.session.discord = undefined;
+                res.redirect('/');
+            });
 });
 
 // Discord oauth
@@ -65,75 +89,29 @@ app.get('/auth', function (req, res, next) {
 
 // Select a guild
 app.get('/select', function (req, res, next) {
-    res.render('select', { session: req.session.discord, fetch: fetch });
+    const sd = req.session.discord;
+    if (sd == undefined || sd.access_token == undefined || Date.now() > sd.expires_at)
+        res.redirect('/connect');
+    else
+        res.render('select');
 });
 
 // Change settings of selected guild
 app.get('/guild/:guild', function (req, res, next) {
-    res.render('guild');
+    const sd = req.session.discord;
+    if (sd == undefined || sd.access_token == undefined || Date.now() > sd.expires_at)
+        res.redirect('/connect');
+    else
+        res.render('guild');
 });
 
 // Send token
 app.get('/token', function (req, res, next) {
-    console.log(req.session);
     if (req.session.discord != undefined)
         res.send(req.session.discord.access_token);
     else
         res.send('null');
 });
-
-
-function stringToValue(v) {
-    if (v === 'false' || v === 'true')
-        return v === 'true';
-    else if (/^\d+$/.test(v))
-        return parseInt(v);
-    else
-        return v;
-}
-
-/**
- * Check if the bot is in the specified guild
- * @param {*} guild Guild id
- */
-function isInGuild(guild) {
-    const result = connection.query(`select guild from messages_sent where guild = '${guild}'`);
-    return result.length == 0 ? false : true;
-}
-
-/**
- * Check if the user is admin in the guild and if the bot is in the guild
- * @param {*} guild Guild id
- * @param {*} token Discord OAuth access token
- */
-function checkGuildAccess(guild, token) {
-    return new Promise((resolve, reject) => {
-        if (token == 'null' || token == undefined || token == null)
-            reject();
-        else
-            fetch('https://discord.com/api/users/@me/guilds', {
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                },
-            })
-                .then(response => {
-                    if (response.status != 200)
-                        reject(response);
-                    else
-                        response.json().then((response) => {
-                            response = response.filter((g) => g.id == guild && (g.permissions & 0x8) == 8);
-                            if (response.length > 0)
-                                // Verify if the bot is in the guild
-                                if (isInGuild(guild))
-                                    resolve();
-                                else
-                                    reject();
-                            else
-                                reject();
-                        });
-                });
-    });
-}
 
 
 // Bot's api
@@ -142,34 +120,46 @@ app.get('/api', function (req, res, next) {
 });
 
 app.get('/api/in/:guild', function (req, res, next) {
-    res.send(isInGuild(req.params.guild));
+    res.send(utils.isInGuild(connection, req.params.guild));
 });
 
 app.get('/api/setting/:guild/:setting', function (req, res, next) {
-    const result = connection.query(`select value from \`guild_options\` where guild = ${req.params.guild} and name = '${req.params.setting}'`)[0];
-
-    if (result != undefined)
-        res.send(JSON.stringify(stringToValue(result.value)));
-    else if (result == undefined && config[req.params.setting] != undefined)
-        res.send(JSON.stringify(config[req.params.setting]));
-    else
-        res.send(JSON.stringify(null));
+    res.send(utils.getOption(config, connection, req.params.guild, req.params.setting).toString());
 });
 
 app.post('/api/setting/:guild/:setting', function (req, res, next) {
     const token = req.body.token;
-    checkGuildAccess(req.params.guild, req.body.token)
-        .then(() => {
-            // Update database
-            const value = req.body.value;
-            const result = connection.query(`INSERT INTO \`guild_options\` (guild, name, value) VALUES('${req.params.guild}', '${req.params.setting}', '${value}') ON DUPLICATE KEY UPDATE value='${value}'`);
-            res.status(200);
-            res.send('OK');
-        })
-        .catch((err) => {
-            res.status(401);
-            res.send(err);
-        });
+    const value = req.body.value;
+
+    // If value haven't changed
+    if (utils.getOption(config, connection, req.params.guild, req.params.setting) == value) {
+
+        res.status(200);
+        res.send('Skipped');
+        console.log('Old value: ' + utils.getOption(config, connection, req.params.guild, req.params.setting), 'New value: ' + value);
+        console.log('Skipped ' + req.params.setting)
+        return;
+
+    } else {
+
+        console.log('Old value: ' + utils.getOption(config, connection, req.params.guild, req.params.setting), 'New value: ' + value);
+        console.log('Changing ' + req.params.setting)
+
+        utils.checkGuildAccess(connection, req.params.guild, token)
+            .then(() => {
+                // Update database
+                const result = connection.query(`INSERT INTO \`guild_options\` (guild, name, value) VALUES('${req.params.guild}', '${req.params.setting}', '${value}') ON DUPLICATE KEY UPDATE value='${value}'`);
+                res.status(200);
+                res.send('OK');
+            })
+            .catch((err) => {
+                if (err != undefined && err.status != undefined)
+                    res.status(err.status);
+                console.log(err);
+                res.send(err);
+            });
+
+    }
 });
 
 
