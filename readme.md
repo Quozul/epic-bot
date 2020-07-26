@@ -17,9 +17,7 @@ My Discord: `Quozul#1174`
 * Add command aliases
 * Config in database per servers
     * Toggle features and commands
-    * Change language for the server
     * Configure aliases (ex.: the alias `?hello` executes the command `?say Hello!`)
-    * Change command prefix
 * Translate command desciption and usage
 * Website to configure the bot
 * ~~Display the reason for a member's departure~~ not possible
@@ -42,6 +40,7 @@ My Discord: `Quozul#1174`
 * Count messages sent by users
 * Spam protection
 * Weird replies when mentionned **[Using FrenchSentencesGenerator](https://github.com/Klemek/FrenchSentencesGenerator)** (French only)
+* Bot configuration through commands and web interface (available at https://discord.quozul.dev/)
 
 ## Commands
 * Get random post from reddit `?reddit`

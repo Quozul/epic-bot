@@ -1,5 +1,10 @@
 {
     "token": "bot_token",
+    "website": {
+        "client_id": "client_id",
+        "client_secret": "client_secret",
+        "redirect_uri": "https://localhost:8082/auth"
+    },
     "prefix": "?",
     "activity": {
         "type": "STREAMING",
