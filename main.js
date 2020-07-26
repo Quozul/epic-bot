@@ -64,22 +64,3 @@ for (const ev of clientEvents) {
 }
 
 client.login(client.config.token);
-
-
-
-
-// Express stuff
-
-
-
-
-/*app.set('view engine', 'ejs');
-
-app.get('/', function (req, res, next) {
-    res.render('index', { query: req.query });
-});
-
-app.listen(8082, function () {
-    console.log('Running server on port 8082!');
-});
-*/

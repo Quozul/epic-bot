@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+    <%- include('includes/head'); %>
+
+    <body class="d-flex flex-column justify-content-between vh-100">
+
+        <header>
+
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active">Home</li>
+                    <li class="breadcrumb-item"><a href="/connect">Connect to Discord</a></li>
+                    <li class="breadcrumb-item"><a href="/select">Select a guild</a></li>
+                    <li class="breadcrumb-item">Change settings</li>
+                </ol>
+            </nav>
+
+        </header>
+
+        <main class="container">
+
+            <h1>epic-bot's website</h1>
+            <hr>
+
+            <div class="jumbotron">
+                <p>
+                    This website is still WIP alongside the bot. You can configure the bot for your server here, first connect to Discord and follow the steps.
+                    <a href="/connect" class="btn btn-primary btn-sm">Configure the bot</a> or <a href="https://discord.com/oauth2/authorize?client_id=660424710021971988&scope=bot&permissions=8" class="btn btn-primary btn-sm">invite the bot</a>
+                </p>
+
+                <h2>Features</h2>
+                <hr>
+                <ul>
+                    <li>Welcome and quit message</li>
+                    <li>Boost progress bar on server boost</li>
+                    <li>Record deleted messages into epic-logging channel</li>
+                    <li>Anti vulgarity filter Powered by Bodyguard (French only)</li>
+                    <li>Command cooldown</li>
+                    <li>Edit commands Command cooldown</li>
+                    <li>Count messages sent by users</li>
+                    <li>Spam protection</li>
+                    <li>Weird replies when mentionned Using FrenchSentencesGenerator (French only)</li>
+                </ul>
+
+                <h2>Commands</h2>
+                <hr>
+                <ul>
+                    <li>Get random post from reddit ?reddit</li>
+                    <li>Lock and unlock voice channels ?lock, ?unlock (voice channels automatically unlocks when channel is empty)</li>
+                    <li>Make the bot speak ?say</li>
+                    <li>See a podium of most active users ?podium</li>
+                    <li>See boost progress bar ?boost</li>
+                    <li>See informations about a user ?whois</li>
+                    <li>Play YouTube video in voice channel ?yt</li>
+                    <li>Leave the voice channel ?leave</li>
+                    <li>Split users into teams ?teams</li>
+                </ul>
+            </div>
+
+        </main>
+
+        <%- include('includes/footer'); %>
+
+    </body>
+
+</html>

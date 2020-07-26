@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+    <%- include('includes/head'); %>
+
+    <body class="d-flex flex-column justify-content-between vh-100">
+
+        <header>
+
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active">Connect to Discord</li>
+                    <li class="breadcrumb-item"><a href="/select">Select a guild</a></li>
+                    <li class="breadcrumb-item">Change settings</li>
+                </ol>
+            </nav>
+
+        </header>
+
+        <main class="container">
+
+            <h1>Connect to Discord</h1>
+            <hr>
+
+            <div class="jumbotron text-center">
+                <p class="text-justify">In order to configure the bot, you have to login to Discord first. This is only used the guilds that you are in.</p>
+                <a class="btn btn-primary btn-lg" href="<%= oauth_url %>">Connect to Discord</a>
+            </div>
+
+        </main>
+
+        <%- include('includes/footer'); %>
+
+    </body>
+
+</html>

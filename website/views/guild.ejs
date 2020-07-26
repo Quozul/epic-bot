@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+    <%- include('includes/head'); %>
+
+    <body class="d-flex flex-column justify-content-between vh-100">
+
+        <header>
+
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active"><a href="/connect">Connect to Discord</a></li>
+                    <li class="breadcrumb-item"><a href="/select">Select a guild</a></li>
+                    <li class="breadcrumb-item active">Change settings</li>
+                </ol>
+            </nav>
+
+        </header>
+
+        <main class="container">
+
+            <h1>Change settings</h1>
+            <hr>
+
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="pills-settings-tab" data-toggle="pill" href="#pills-settings" role="tab" aria-controls="pills-settings" aria-selected="true">Settings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-commands-tab" data-toggle="pill" href="#pills-commands" role="tab" aria-controls="pills-commands" aria-selected="false">Custom commands & aliases</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-features-tab" data-toggle="pill" href="#pills-features" role="tab" aria-controls="pills-features" aria-selected="false">Toggle commands & features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-statistics-tab" data-toggle="pill" href="#pills-statistics" role="tab" aria-controls="pills-statistics" aria-selected="false">Server statistics</a>
+                </li>
+            </ul>
+
+            <div class="jumbotron">
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-settings" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <form id="bot-settings">
+                            <div class="form-group form-check">
+                                <input type="checkbox" class="setting-value form-check-input" id="bodyguard" name="bodyguard">
+                                <label class="form-check-label" for="bodyguard">Bodyguard</label>
+                                <small id="emailHelp" class="form-text text-muted">Toggles bad words censorship (French only).</small>
+                            </div>
+
+                            <div class="form-group form-check">
+                                <input type="checkbox" class="setting-value form-check-input" id="spam_protection" name="spam_protection">
+                                <label class="form-check-label" for="spam_protection">Spam protection</label>
+                                <small class="form-text text-muted">Toggles spam protection.</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lang">Language</label>
+
+                                <select class="setting-value form-control" id="lang" name="lang">
+                                    <option value="en">English</option>
+                                    <option value="fr">French</option>
+                                </select>
+
+                                <small class="form-text text-muted">Language of the bot.</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="command_cooldown">Command cooldown</label>
+                                <input type="number" class="setting-value form-control" id="command_cooldown" name="command_cooldown" value="5">
+                                <small class="form-text text-muted">Cooldown between sames messages and commands in seconds.</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prefix">Prefix</label>
+                                <input type="text" class="setting-value form-control" id="prefix" name="prefix" value="?">
+                                <small class="form-text text-muted">Prefix used for commands.</small>
+                            </div>
+
+                            <button type="button" class="btn btn-primary" onclick="save();">Save</button>
+                        </form>
+                    </div>
+
+                    <div class="tab-pane fade" id="pills-commands" role="tabpanel" aria-labelledby="pills-commands-tab">
+                        Sorry, this tab is not available yet.
+                    </div>
+
+                    <div class="tab-pane fade" id="pills-features" role="tabpanel" aria-labelledby="pills-features-tab">
+                        Sorry, this tab is not available yet.
+                    </div>
+
+                    <div class="tab-pane fade" id="pills-statistics" role="tabpanel" aria-labelledby="pills-statistics-tab">
+                        Sorry, this tab is not available yet.
+                    </div>
+                </div>
+            </div>
+
+            <script>
+
+                setSettingValue();
+
+            </script>
+
+        </main>
+
+        <%- include('includes/footer'); %>
+
+    </body>
+
+</html>

@@ -7,6 +7,7 @@ create table if not exists `locked_voice_channel` (
     id varchar(18) primary key
 );
 
+-- unused
 drop table if exists `time_spent_voice`;
 create table if not exists `time_spent_voice` (
     user varchar(18),
@@ -44,6 +45,7 @@ create table if not exists `guild_options` (
     primary key (guild, name)
 );
 
+-- unused
 drop table if exists `aliases`;
 create table if not exists `aliases` (
     guild varchar(18),
@@ -53,6 +55,7 @@ create table if not exists `aliases` (
     primary key (guild, command)
 );
 
+-- unused
 drop table if exists `disabled_commands`;
 create table if not exists `disabled_commands` (
     guild varchar(18),
@@ -61,10 +64,22 @@ create table if not exists `disabled_commands` (
     primary key (guild, command)
 );
 
+-- unused
 drop table if exists `disabled_events`;
 create table if not exists `disabled_events` (
     guild varchar(18),
     event varchar(16),
     
     primary key (guild, event)
+);
+
+-- unused
+drop table if exists `playlist`;
+create table if not exists `playlist` (
+    guild varchar(18),
+    id int auto_increment,
+    url varchar(128),
+    name varchar(128),
+    
+    primary key (guild, id)
 );
