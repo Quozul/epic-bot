@@ -5,21 +5,71 @@
 
     <body class="d-flex flex-column justify-content-between vh-100">
 
-        <header>
-
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item active">API</li>
-                </ol>
-            </nav>
-
-        </header>
+        <%- include('includes/header'); %>
 
         <main class="container">
 
             <div class="jumbotron">
                 <h1>API documentation</h1>
+                <p class="text-muted">
+                    I am not good at writing documentation but here is a small help if you want to play around with the bot's API.
+                </p>
 
+                <table class="table table-dark table-responsive">
+                    <thead>
+                        <tr>
+                            <th>URL</th>
+                            <th>Method</th>
+                            <th>Body</th>
+                            <th>Response</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>/api/in/:guild</td>
+                            <td>GET</td>
+                            <td></td>
+                            <td>Boolean</td>
+                            <td>Returns true if the bot is in the specified guild.</td>
+                        </tr>
+                        <tr>
+                            <td>/api/setting/:guild/:setting</td>
+                            <td>GET</td>
+                            <td></td>
+                            <td>*</td>
+                            <td>Returns the value of the given setting for the guild.</td>
+                        </tr>
+                        <tr>
+                            <td>/api/setting/:guild/:setting</td>
+                            <td>POST</td>
+                            <td>{value: "value of the setting", token: "your discord oauth token"}</td>
+                            <td>Skipped (value is the same) | OK (value changed)</td>
+                            <td>Change the value of the given setting.</td>
+                        </tr>
+                        <tr>
+                            <td>/api/alias/:guild</td>
+                            <td>GET</td>
+                            <td></td>
+                            <td>[{alias: "alias used", command: "executed command"}]</td>
+                            <td>Returns an array of aliases for the given guild.</td>
+                        </tr>
+                        <tr>
+                            <td>/api/alias/:guild</td>
+                            <td>POST</td>
+                            <td>{alias: "alias used", command: "executed command", token: "your discord oauth token"}</td>
+                            <td>OK (alias created)</td>
+                            <td>Create a new alias.</td>
+                        </tr>
+                        <tr>
+                            <td>/api/alias/:guild</td>
+                            <td>UPDATE</td>
+                            <td>{alias: "alias used", command: "executed command", token: "your discord oauth token"}</td>
+                            <td>Skipped (value is the same) | OK (value changed)</td>
+                            <td>Update the values for an alias.</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
         </main>

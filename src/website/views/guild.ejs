@@ -15,10 +15,10 @@
 
                 <ul class="nav nav-pills mb-3 d-flex justify-content-between" id="pills-tab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="pills-settings-tab" data-toggle="pill" href="#pills-settings" role="tab" aria-controls="pills-settings" aria-selected="true">Settings</a>
+                        <a class="nav-link" id="pills-settings-tab" data-toggle="pill" href="#pills-settings" role="tab" aria-controls="pills-settings" aria-selected="true">Settings</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="pills-commands-tab" data-toggle="pill" href="#pills-commands" role="tab" aria-controls="pills-commands" aria-selected="false">Custom commands & aliases</a>
+                        <a class="nav-link" id="pills-aliases-tab" data-toggle="pill" href="#pills-aliases" role="tab" aria-controls="pills-aliases" aria-selected="false">Custom commands & aliases</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="pills-features-tab" data-toggle="pill" href="#pills-features" role="tab" aria-controls="pills-features" aria-selected="false">Toggle commands & features</a>
@@ -29,7 +29,7 @@
                 </ul>
 
                 <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="pills-settings" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <div class="tab-pane fade" id="pills-settings" role="tabpanel" aria-labelledby="pills-home-tab">
                         <form id="bot-settings">
                             <div class="form-group form-check">
                                 <input type="checkbox" class="setting-value form-check-input" id="bodyguard" name="bodyguard">
@@ -70,16 +70,58 @@
                         </form>
                     </div>
 
-                    <div class="tab-pane fade" id="pills-commands" role="tabpanel" aria-labelledby="pills-commands-tab">
-                        Sorry, this tab is not available yet.
+                    <div class="tab-pane fade" id="pills-aliases" role="tabpanel" aria-labelledby="pills-aliases-tab">
+                        <p class="text-muted text-center">This tab is still WIP, you can only add aliases.</p>
+
+                        <form>
+                            <div id="aliases" class="form-group">
+                                No aliases in this guild.
+                            </div>
+                        </form>
+
+                        <hr>
+
+                        <form id="new-alias">
+                            <div class="form-group">
+                                <label>Add new alias</label>
+                                <div class="row">
+
+                                    <div class="col-4">
+                                        <input type="text" class="form-control" placeholder="Alias" name="alias">
+                                    </div>
+
+                                    <div class="col-4">
+                                        <input type="text" class="form-control" placeholder="Command" name="command">
+                                    </div>
+
+                                    <div class="col-4">
+                                        <button type="button" class="btn btn-primary w-100" onclick="addAlias();">Add alias</button>
+                                    </div>
+
+                                </div>
+                                <small class="form-text text-muted">Write an alias to be used to execute an other command, don't write the prefix.</small>
+
+                            </div>
+
+                        </form>
                     </div>
 
                     <div class="tab-pane fade" id="pills-features" role="tabpanel" aria-labelledby="pills-features-tab">
-                        Sorry, this tab is not available yet.
+                        <p class="text-muted text-center">This tab will be available soon.</p>
+                        <div class="row">
+                            <div class="col-6">
+                                <h3>Commands</h3>
+                            </div>
+                            <div class="col-6">
+                                <h3>Features</h3>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="tab-pane fade" id="pills-statistics" role="tabpanel" aria-labelledby="pills-statistics-tab">
-                        Sorry, this tab is not available yet.
+                        <p class="text-muted text-center">This tab will be available soon.</p>
+                        <h3>Messages sent by user</h3>
+                        <h3>Interractions with the bot</h3>
                     </div>
                 </div>
             </div>
@@ -87,6 +129,8 @@
             <script>
 
                 setSettingValue();
+                getAliases();
+                setPills();
 
             </script>
 

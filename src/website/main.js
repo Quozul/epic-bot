@@ -32,6 +32,9 @@ app.use(bodyParser.json());
 app.use((req, res, next) => {
     res.locals.path = req.path;
     res.locals.session = req.session;
+    res.locals.connection = connection;
+    res.locals.params = req.params;
+    res.locals.fs = fs;
     next();
 });
 
@@ -138,7 +141,6 @@ app.get('/api/setting/:guild/:setting', function (req, res, next) {
 });
 
 app.post('/api/setting/:guild/:setting', function (req, res, next) {
-    const token = req.body.token;
     const value = req.body.value;
 
     // If value haven't changed
@@ -155,7 +157,7 @@ app.post('/api/setting/:guild/:setting', function (req, res, next) {
         console.log('Old value: ' + utils.getOption(config, connection, req.params.guild, req.params.setting), 'New value: ' + value);
         console.log('Changing ' + req.params.setting)
 
-        utils.checkGuildAccess(connection, req.params.guild, token)
+        utils.checkGuildAccess(connection, req.params.guild, req.body.token)
             .then(() => {
                 // Update database
                 const result = connection.query(`INSERT INTO \`guild_options\` (guild, name, value) VALUES('${req.params.guild}', '${req.params.setting}', '${value}') ON DUPLICATE KEY UPDATE value='${value}'`);
@@ -165,11 +167,34 @@ app.post('/api/setting/:guild/:setting', function (req, res, next) {
             .catch((err) => {
                 if (err != undefined && err.status != undefined)
                     res.status(err.status);
-                console.log(err);
                 res.send(err);
             });
 
     }
+});
+
+app.get('/api/alias/:guild', function (req, res, next) {
+    const result = connection.query(`select command, alias from aliases where guild = '${req.params.guild}'`);
+    res.send(JSON.stringify(result));
+});
+
+app.post('/api/alias/:guild', function (req, res, next) {
+    const alias = req.body.alias;
+    const command = req.body.command;
+    console.log(req.body);
+
+    utils.checkGuildAccess(connection, req.params.guild, req.body.token)
+        .then(() => {
+            // Update database
+            const result = connection.query(`INSERT INTO \`aliases\` (guild, alias, command) VALUES('${req.params.guild}', '${alias}', '${command}') ON DUPLICATE KEY UPDATE command='${command}'`);
+            res.status(200);
+            res.send('OK');
+        })
+        .catch((err) => {
+            if (err != undefined && err.status != undefined)
+                res.status(err.status);
+            res.send(err);
+        });
 });
 
 

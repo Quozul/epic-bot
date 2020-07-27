@@ -2,9 +2,17 @@
 
     <%
     let connected = false;
-    if (session.discord != undefined && session.discord.access_token != undefined && Date.now() < session.discord.expires_at)
+    if (session.discord != undefined && session.discord.access_token != undefined && Date.now() < session.discord.expires_at) {
         connected = true;
     %>
+
+    <script>
+        setTimeout(() => {
+            createToast('Disconnected', 'You have been disconnected from Discord, to continue configuring your bot please log back in.')
+        }, <%= session.discord.expires_at %> - Date.now());
+    </script>
+
+    <% } %>
 
     <nav class="navbar navbar-expand-lg navbar-dark row m-0">
         <a class="navbar-brand col-2 mr-0" href="/">
@@ -33,5 +41,7 @@
             </ul>
         </div>
     </nav>
+
+    <div id="toasts" style="position: absolute; top: 10px; right: 10px; width: 348px;"></div>
 
 </header>
