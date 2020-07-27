@@ -40,8 +40,7 @@ app.get('/', function (req, res, next) {
 
 // Button to connect to Discord oauth
 app.get('/connect', function (req, res, next) {
-    const sd = req.session.discord;
-    if (sd == undefined || sd.access_token == undefined || Date.now() > sd.expires_at)
+    if (!utils.isConnected(req.session.discord))
         res.render('connect', { oauth_url: config.website.oauth_url });
     else
         res.redirect('/select');
@@ -50,7 +49,8 @@ app.get('/connect', function (req, res, next) {
 // Revoke token
 app.get('/disconnect', function (req, res, next) {
     const sd = req.session.discord;
-    if (sd == undefined || sd.access_token == undefined || Date.now() > sd.expires_at)
+
+    if (!utils.isConnected(sd))
         res.redirect('/connect');
     else
         fetch('https://discord.com/api/oauth2/token/revoke', {
@@ -59,14 +59,13 @@ app.get('/disconnect', function (req, res, next) {
             body: `token=${sd.access_token}&client_id=${config.website.client_id}&client_secret=${config.website.client_secret}`
         })
             .then(response => {
-                req.session.discord = undefined;
+                sd = undefined;
                 res.redirect('/');
             });
 });
 
 // Discord oauth
 app.get('/auth', function (req, res, next) {
-    console.log(config.website.redirect_uri);
     const data = {
         client_id: config.website.client_id,
         client_secret: config.website.client_secret,
@@ -93,8 +92,7 @@ app.get('/auth', function (req, res, next) {
 
 // Select a guild
 app.get('/select', function (req, res, next) {
-    const sd = req.session.discord;
-    if (sd == undefined || sd.access_token == undefined || Date.now() > sd.expires_at)
+    if (!utils.isConnected(req.session.discord))
         res.redirect('/connect');
     else
         res.render('select');
@@ -102,16 +100,22 @@ app.get('/select', function (req, res, next) {
 
 // Change settings of selected guild
 app.get('/guild/:guild', function (req, res, next) {
-    const sd = req.session.discord;
-    if (sd == undefined || sd.access_token == undefined || Date.now() > sd.expires_at)
+    if (!utils.isConnected(req.session.discord))
         res.redirect('/connect');
     else
         res.render('guild');
 });
 
+app.get('/guild', function (req, res, next) {
+    if (utils.isConnected(req.session.discord))
+        res.redirect('/select');
+    else
+        res.redirect('/connect');
+});
+
 // Send token
 app.get('/token', function (req, res, next) {
-    if (req.session.discord != undefined)
+    if (utils.isConnected(req.session.discord))
         res.send(req.session.discord.access_token);
     else
         res.send('null');

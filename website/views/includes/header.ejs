@@ -1,4 +1,4 @@
-<header class="mb-3 p-4">
+<header class="mb-4">
 
     <%
     let connected = false;
@@ -6,21 +6,32 @@
         connected = true;
     %>
 
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb m-0 p-0">
-            <li class="breadcrumb-item <%= path == '/' ? 'active' : '' %>"><a <%= path != '/' ? 'href=/' : '' %>>Home</a></li>
+    <nav class="navbar navbar-expand-lg navbar-dark row m-0">
+        <a class="navbar-brand col-2 mr-0" href="/">
+            <img src="/public/assets/icon.png" width="30" height="30" class="d-inline-block align-top rounded" alt="">
+            Epic-bot
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            <li class="breadcrumb-item <%= path == '/connect' ? 'active' : '' %>">
-                <% if (!connected) { %>
-                <a <%= path != '/connect' ? 'href=/connect' : '' %>>Connect to Discord</a>
-                <% } else { %>
-                <a <%= path != '/disconnect' ? 'href=/disconnect' : '' %>>Disconnect from Discord</a>
-                <% } %>
-            </li>
+        <div class="collapse navbar-collapse col-10" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item <%= path == '/' ? 'active' : '' %>"><a class="nav-link" <%= path != '/' ? 'href=/' : '' %>>Home</a></li>
 
-            <li class="breadcrumb-item <%= path == '/select' ? 'active' : '' %>"><a <%= path != '/select' && connected ? 'href=/select' : '' %>>Select a guild</a></li>
-            <li class="breadcrumb-item <%= path.includes('/guild') ? 'active' : '' %>">Change settings</li>
-        </ol>
+                <li class="nav-item <%= path == '/connect' ? 'active' : '' %>">
+                    <% if (!connected) { %>
+                    <a class="nav-link" <%= path != '/connect' ? 'href=/connect' : '' %>>Log in with Discord</a>
+                    <% } else { %>
+                    <a class="nav-link" <%= path != '/disconnect' ? 'href=/disconnect' : '' %>>Log out from Discord</a>
+                    <% } %>
+                </li>
+
+                <li class="nav-item <%= path == '/select' ? 'active' : '' %>"><a class="nav-link <%= !connected ? 'disabled' : '' %>" <%= path != '/select' && connected ? 'href=/select' : '' %>>Select a guild</a></li>
+
+                <li class="nav-item <%= path.includes('/guild') ? 'active' : '' %>"><span class="nav-link disabled">Change settings</span></li>
+            </ul>
+        </div>
     </nav>
 
 </header>

@@ -3,15 +3,21 @@
 }
 
 body {
+    background: url('/public/assets/discord.png') fixed center;
+    background-size: cover;
+    color: #ffffff;
+}
+
+.color-dark {
     background-color: #2C2F33;
-    color: #ffffff
 }
 
 .jumbotron,
 .breadcrumb,
 footer,
-header {
-    background-color: #23272A;
+header,
+.color-black {
+    background-color: #23272a;
 }
 
 .btn-primary {
