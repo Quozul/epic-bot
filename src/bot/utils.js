@@ -252,10 +252,11 @@ function getTranslation(client, guild, index, ...values) {
  * Execute a command from the given message
  * @param {Message} msg 
  */
-function executeCommand(client, msg) {
+function executeCommand(client, msg, content) {
     return new Promise((resolve, reject) => {
         const prefix = getOption(client, msg.guild, 'prefix');
-        const content = msg.content.substr(prefix.length, msg.content.length);
+        if (content == undefined)
+            content = msg.content.substr(prefix.length, msg.content.length);
         const args = content.split(/ +/);
         const cmd = args.shift().toLowerCase();
 
@@ -290,8 +291,15 @@ function executeCommand(client, msg) {
                 }
             }
 
-        } else
-            reject(getTranslation(client, msg.guild, 'system.unknown_command', `${prefix}help`));
+        } else {
+            // TODO: Add support for aliases here
+            const result = client.connection.query(`select command from aliases where guild = '${msg.guild.id}' and alias = '${content}'`);
+            console.log(result);
+            if (result.length > 0)
+                executeCommand(client, msg, result[0].command)
+            else
+                reject(getTranslation(client, msg.guild, 'system.unknown_command', `${prefix}help`));
+        }
     });
 }
 
