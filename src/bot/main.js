@@ -13,23 +13,23 @@ client.events = new Discord.Collection();
 client.langs = new Discord.Collection();
 
 // Load commands
-const commands = utils.rreadDirSync('./commands').filter(file => file.endsWith('.js'));
+const commands = utils.rreadDirSync(__dirname + '/commands').filter(file => file.endsWith('.js'));
 for (const file of commands) {
     const command = require(file);
     client.commands.set(command.name, command);
 }
 
 // Load events
-const events = utils.rreadDirSync('./events').filter(file => file.endsWith('.js'));
+const events = utils.rreadDirSync(__dirname + '/events').filter(file => file.endsWith('.js'));
 for (const file of events) {
     const event = require(file);
     client.events.set(file, event);
 }
 
 // Load languages
-const langs = fs.readdirSync('./langs').filter(file => file.endsWith('.json'));
+const langs = fs.readdirSync(__dirname + '/langs').filter(file => file.endsWith('.json'));
 for (const file of langs) {
-    client.langs.set(file.replace('.json', ''), JSON.parse(fs.readFileSync(`./langs/${file}`)));
+    client.langs.set(file.replace('.json', ''), JSON.parse(fs.readFileSync(`${__dirname}/langs/${file}`)));
 }
 
 // MySQL stuff

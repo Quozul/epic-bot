@@ -1,7 +1,7 @@
 const utils = require('../../utils');
 const stringSimilarity = require('string-similarity');
 const java = require("java");
-java.classpath.push("french-sentences-gen-1.0.jar");
+java.classpath.push("src/bot/french-sentences-gen-1.0.jar");
 
 const SentenceGenerator = java.newInstanceSync("fr.klemek.fsg.SentenceGenerator");
 

@@ -5,10 +5,10 @@ const app = express();
 const session = require('express-session');
 const fetch = require('node-fetch');
 const bodyParser = require('body-parser');
-const utils = require('./utils');
+const utils = require(__dirname + '/utils');
 
 // Load bot's config
-const config = JSON.parse(fs.readFileSync('../config.json'));
+const config = JSON.parse(fs.readFileSync('config.json'));
 
 // Connect to database
 const connection = new mysql({
@@ -19,6 +19,8 @@ const connection = new mysql({
 });
 
 app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
+
 app.use(session({
     secret: 'keyboard cat',
     resave: false,

@@ -3,6 +3,7 @@
     "website": {
         "client_id": "client_id",
         "client_secret": "client_secret",
+        "oauth_url": "oauth_url",
         "redirect_uri": "https://localhost:8082/auth"
     },
     "prefix": "?",

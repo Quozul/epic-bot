@@ -1,13 +1,14 @@
 {
   "name": "epic-bot",
   "version": "1.0.0",
-  "description": "",
+  "description": "A Discord bot",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "bot": "node src/bot/main.js",
+    "website": "node src/website/main.js"
   },
   "author": "Quozul",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@discordjs/opus": "^0.3.2",
     "body-parser": "^1.19.0",
@@ -18,7 +19,6 @@
     "java": "^0.12.1",
     "mysql": "^2.18.1",
     "node-fetch": "^2.6.0",
-    "nodemon": "^2.0.4",
     "string-similarity": "^4.0.1",
     "sync-mysql": "^3.0.1",
     "ytdl-core": "^3.1.0"
