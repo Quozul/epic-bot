@@ -68,6 +68,51 @@
                             <td>Skipped (value is the same) | OK (value changed)</td>
                             <td>Update the values for an alias.</td>
                         </tr>
+                        <tr>
+                            <td>/api/alias/:guild</td>
+                            <td>DELETE</td>
+                            <td>{alias: "alias used", token: "your discord oauth token"}</td>
+                            <td>OK (alias deleted)</td>
+                            <td>Delete an alias.</td>
+                        </tr>
+                        <tr>
+                            <td>/api/command/:guild/:command</td>
+                            <td>GET</td>
+                            <td></td>
+                            <td>Boolean</td>
+                            <td>Return true if the command is enabled in the guild.</td>
+                        </tr>
+                        <tr>
+                            <td>/api/command/:guild/:command</td>
+                            <td>POST</td>
+                            <td>{state: Boolean, token: "your discord oauth token"}</td>
+                            <td>Skipped (value is the same) | OK (value changed)</td>
+                            <td>Enables or disables a command.</td>
+                        </tr>
+                        <tr>
+                            <td>/api/event/:guild/:event</td>
+                            <td>GET</td>
+                            <td></td>
+                            <td>Boolean</td>
+                            <td>Return true if the event is enabled in the guild.</td>
+                        </tr>
+                        <tr>
+                            <td>/api/event/:guild/:event</td>
+                            <td>POST</td>
+                            <td>{state: Boolean, token: "your discord oauth token"}</td>
+                            <td>Skipped (value is the same) | OK (value changed)</td>
+                            <td>Enables or disables an event.</td>
+                        </tr>
+                        <tr>
+                            <th colspan="5">The following are not planned features</th>
+                        </tr>
+                        <tr>
+                            <td>/api/warns/:guild</td>
+                            <td>GET</td>
+                            <td></td>
+                            <td>[{id: id, user: {username: "username", avatar: "avatar"}, reason: reason, warned_by: {username: "username", avatar: "avatar"}}]</td>
+                            <td>Returns an array of warned users.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

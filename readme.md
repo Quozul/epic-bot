@@ -1,5 +1,5 @@
 # Epic-bot
-Discord bot for my server. You can change the bot's language using the command `?config lang fr`. Default language is English, supported languages are in the `lang` folder.  
+Discord bot for my server. You can configure the bot with the `?config` command or go on the [website](https://discord.quozul.dev).
 If you wish to invite the bot, [here's an invite link](https://discord.com/oauth2/authorize?client_id=660424710021971988&scope=bot&permissions=8) (the bot is running in English but can be changed to any languages that are in the `lang` folder).  
 Feel free to open an issue or a pull request to request new features.  
 My Discord: `Quozul#1174`
@@ -17,7 +17,6 @@ My Discord: `Quozul#1174`
 * Add command aliases
 * Config in database per servers
     * Toggle features and commands
-    * Configure aliases (ex.: the alias `?hello` executes the command `?say Hello!`)
 * Translate command desciption and usage
 * Website to configure the bot
 * ~~Display the reason for a member's departure~~ not possible
@@ -29,6 +28,7 @@ My Discord: `Quozul#1174`
 * Special perks for active servers
     * Changing the bot's activity
 * Images in polls and announcements
+* Warn users
 
 ## Features
 * Welcome and quit message
@@ -41,6 +41,7 @@ My Discord: `Quozul#1174`
 * Spam protection
 * Weird replies when mentionned **[Using FrenchSentencesGenerator](https://github.com/Klemek/FrenchSentencesGenerator)** (French only)
 * Bot configuration through commands and web interface (available at https://discord.quozul.dev/)
+* Custom commands/aliases configurable on the website
 
 ## Commands
 * Get random post from reddit `?reddit`
@@ -78,3 +79,8 @@ Name | Description | Default value | Per guild
 `mysql.user` | Username used to connect to your database | `root` | No
 `mysql.password` | Password used to connect to your database | `root` | No
 `mysql.database` | The name of the database used by the bot | `epic-bot` | No
+`website` | | | No
+`website.client_id` | ID of the application | | No
+`website.client_secret` | Secret token of the application | | No
+`website.oauth_url` | URL to redirect the user to Discord's log in page | | No
+`website.redirect_uri` | This is used by the server to get the token | `https://localhost:8082/auth` | No
