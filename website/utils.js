@@ -68,7 +68,14 @@ function getOption(config, connection, guild, setting) {
         return null;
 }
 
+function isConnected(sd) {
+    if (sd == undefined || sd.access_token == undefined || Date.now() > sd.expires_at)
+        return false;
+    return true;
+}
+
 exports.getOption = getOption;
+exports.isConnected = isConnected;
 exports.stringToValue = stringToValue;
 exports.isInGuild = isInGuild;
 exports.checkGuildAccess = checkGuildAccess;

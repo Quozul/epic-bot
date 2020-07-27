@@ -9,12 +9,14 @@
 
         <main class="container">
 
-            <h1>Connect to Discord</h1>
-            <hr>
+            <div class="jumbotron">
+                <h1>Log in with Discord</h1>
+                <hr>
 
-            <div class="jumbotron text-center">
-                <p class="text-justify">In order to configure the bot, you have to login to Discord first. This is only used the guilds that you are in.</p>
-                <a class="btn btn-primary btn-lg" href="<%= oauth_url %>">Connect to Discord</a>
+                <p class="text-justify">In order to configure the bot, you have to log in with Discord first. This is only used to see the guilds you are in.</p>
+                <div class="text-center">
+                    <a class="btn btn-primary btn-lg" href="<%= oauth_url %>">Log in with Discord</a>
+                </div>
             </div>
 
         </main>
