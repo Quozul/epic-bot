@@ -40,7 +40,11 @@ app.get('/', function (req, res, next) {
 
 // Button to connect to Discord oauth
 app.get('/connect', function (req, res, next) {
-    res.render('connect', { oauth_url: config.website.oauth_url });
+    const sd = req.session.discord;
+    if (sd == undefined || sd.access_token == undefined || Date.now() > sd.expires_at)
+        res.render('connect', { oauth_url: config.website.oauth_url });
+    else
+        res.redirect('/select');
 });
 
 // Revoke token
