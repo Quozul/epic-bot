@@ -297,6 +297,9 @@ function executeCommand(client, msg, content) {
             console.log(result);
             if (result.length > 0)
                 executeCommand(client, msg, result[0].command)
+                    .catch((err) => {
+                        reject(err);
+                    });
             else
                 reject(getTranslation(client, msg.guild, 'system.unknown_command', `${prefix}help`));
         }

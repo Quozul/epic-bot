@@ -9,8 +9,6 @@ module.exports = {
     execute(msg, args) {
         if (args.length < 1) throw null;
 
-        msg.channel.startTyping();
-
         utils.request('GET', `https://www.reddit.com/r/${args[0]}/hot/.json?count=20`).then((res) => {
             const post = JSON.parse(res).data.children.random().data;
 
@@ -23,10 +21,8 @@ module.exports = {
                 .setImage(post.url)
                 .setURL('https://redd.it/' + post.id)
 
-            msg.channel.stopTyping();
             msg.channel.send(embed).catch(err => console.log(err));
         }).catch((err) => {
-            msg.channel.stopTyping();
             msg.channel.send(utils.getTranslation(msg.client, msg.guild, 'reddit.error'));
         });
     }

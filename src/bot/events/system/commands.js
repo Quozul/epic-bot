@@ -84,12 +84,18 @@ module.exports = {
             const content = utils.getTranslation(client, msg.guild, 'system.fast_commands', msg.author.id);
             spamVerification(msg, content, client)
                 .then(() => {
+                    msg.channel.startTyping();
 
                     // Count executed commands then execute command
                     utils.updateOrInsertBotInteractions(client, 'bot_interaction', msg, 1);
-                    utils.executeCommand(client, msg).catch((error) => {
-                        msg.reply(error);
-                    });
+                    utils.executeCommand(client, msg)
+                        .then(() => {
+                            msg.channel.stopTyping();
+                        })
+                        .catch((error) => {
+                            msg.reply(error);
+                            msg.channel.stopTyping();
+                        });
 
                 })
                 .catch(d => spamMessage(msg, d, content));

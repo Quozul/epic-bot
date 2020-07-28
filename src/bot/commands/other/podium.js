@@ -7,7 +7,6 @@ module.exports = {
     usage: '[days] [member amount]',
     arg_type: 'args',
     execute(msg, args) {
-        msg.channel.startTyping();
         const client = msg.client;
 
         if (args[0] != undefined && isNaN(args[0]) || args[1] != undefined && isNaN(args[1])) throw utils.getTranslation(client, msg.guild, 'podium.value_not_numeric');
@@ -39,9 +38,5 @@ module.exports = {
         });
 
         msg.channel.send(embed)
-            .then(() => {
-                msg.channel.stopTyping();
-            })
-            .catch(err => console.log(err));
     }
 }

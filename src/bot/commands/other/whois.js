@@ -7,8 +7,6 @@ module.exports = {
     usage: '[user mention]',
     arg_type: 'none',
     execute(msg) {
-        msg.channel.startTyping();
-
         let user;
 
         if (msg.mentions.users.size == 1) user = msg.mentions.users.first();
@@ -36,9 +34,5 @@ module.exports = {
             );
 
         msg.channel.send(embed)
-            .then(() => {
-                msg.channel.stopTyping();
-            })
-            .catch(err => console.log(err));
     }
 }

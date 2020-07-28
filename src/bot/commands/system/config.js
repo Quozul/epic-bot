@@ -21,9 +21,6 @@ module.exports = {
         if (!msg.member.permissions.has('ADMINISTRATOR')) throw utils.getTranslation(client, msg.guild, 'system.no_permission_command');
 
 
-        msg.channel.startTyping();
-
-
         if (args[0] == undefined) {
 
 
@@ -62,6 +59,5 @@ module.exports = {
         }
 
 
-        msg.channel.stopTyping();
     }
 }
