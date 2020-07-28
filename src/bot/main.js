@@ -63,4 +63,12 @@ for (const ev of clientEvents) {
     });
 }
 
+client.on('guildCreate', (guild) => {
+    client.connection.query(`insert into guild (guild) values ('${guild.id}')`);
+});
+
+client.on('guildDelete', (guild) => {
+    client.connection.query(`update guild set status = 'o' where guild = '${guild.id}'`);
+});
+
 client.login(client.config.token);

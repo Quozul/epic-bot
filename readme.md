@@ -1,4 +1,11 @@
 # Epic-bot
+
+![npm](https://img.shields.io/npm/v/discord.js?label=Discord.js)
+![GitHub](https://img.shields.io/github/license/quozul/epic-bot)
+<a href="https://discord.quozul.dev/">
+![Website](https://img.shields.io/website?url=https%3A%2F%2Fdiscord.quozul.dev%2F)
+</a>
+
 Discord bot for my server. You can configure the bot with the `?config` command or go on the [website](https://discord.quozul.dev).
 
 If you wish to invite the bot, [here's an invite link](https://discord.com/oauth2/authorize?client_id=660424710021971988&scope=bot&permissions=8) (the bot is running in English but can be changed to any languages that are in the `lang` folder).

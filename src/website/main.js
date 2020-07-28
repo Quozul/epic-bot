@@ -136,6 +136,11 @@ app.get('/api/in/:guild', function (req, res, next) {
     res.send(utils.isInGuild(connection, req.params.guild));
 });
 
+app.get('/api/in', function (req, res, next) {
+    const result = connection.query(`select count(guild) as c from guild where status = 'i'`);
+    res.send(JSON.stringify(result[0].c));
+});
+
 app.get('/api/setting/:guild/:setting', function (req, res, next) {
     res.send(utils.getOption(config, connection, req.params.guild, req.params.setting).toString());
 });

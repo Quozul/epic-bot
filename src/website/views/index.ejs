@@ -12,6 +12,7 @@
             <div class="jumbotron">
                 <h1>epic-bot's website</h1>
                 <hr>
+                <span class="text-muted">Guilds: <span class="badge badge-primary" id="guild-amount">...</span></span>
 
                 <p>
                     This website is still WIP alongside the bot. You can configure the bot for your server here, first connect to Discord and follow the steps.
@@ -54,6 +55,14 @@
 
                 <a href="https://github.com/Quozul/epic-bot" class="btn btn-primary btn-sm w-100 m-1">See more on GitHub</a>
             </div>
+
+            <script>
+                fetch('/api/in')
+                    .then(res => res.json())
+                    .then(response => {
+                        document.getElementById('guild-amount').innerHTML = response;
+                    })
+            </script>
 
         </main>
 
