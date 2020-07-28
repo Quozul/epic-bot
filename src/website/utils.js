@@ -14,7 +14,7 @@ function stringToValue(v) {
  * @param {*} guild Guild id
  */
 function isInGuild(connection, guild) {
-    const result = connection.query(`select guild from messages_sent where guild = '${guild}'`);
+    const result = connection.query(`select guild from guild where guild = '${guild}'`);
     return result.length == 0 ? false : true;
 }
 

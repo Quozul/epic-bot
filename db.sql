@@ -45,7 +45,6 @@ create table if not exists `guild_options` (
     primary key (guild, name)
 );
 
--- unused
 drop table if exists `aliases`;
 create table if not exists `aliases` (
     guild varchar(18),
@@ -82,4 +81,11 @@ create table if not exists `playlist` (
     name varchar(128),
     
     primary key (guild, id)
+);
+
+drop table if exists `guild`;
+create table if not exists `guild` (
+    guild varchar(18) primary key,
+    joined datetime default now(),
+    status char(1) default 'i'
 );
