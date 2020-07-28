@@ -7,8 +7,6 @@ module.exports = {
     usage: '',
     arg_type: 'none',
     execute(msg, args) {
-        msg.channel.startTyping();
-
         utils.request('GET', 'https://www.reddit.com/r/memes/hot/.json?count=20').then((res) => {
             const meme = JSON.parse(res).data.children.random().data;
 
@@ -23,10 +21,6 @@ module.exports = {
                 .setDescription('https://redd.it/' + meme.id);
 
             msg.channel.send(embed)
-                .then(() => {
-                    msg.channel.stopTyping();
-                })
-                .catch(err => console.log(err));
         });
     }
 }

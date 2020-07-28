@@ -49,8 +49,8 @@ create table if not exists `guild_options` (
 drop table if exists `aliases`;
 create table if not exists `aliases` (
     guild varchar(18),
-    command varchar(16),
-    alias varchar(16),
+    command varchar(64),
+    alias varchar(32),
     
     primary key (guild, command)
 );
