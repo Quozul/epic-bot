@@ -68,4 +68,4 @@ client.on('guildDelete', (guild) => {
     client.connection.query(`update guild set status = 'o' where guild = '${guild.id}'`);
 });
 
-client.login(client.config.token);
+client.login(process.env.BOT_TOKEN);

@@ -208,6 +208,7 @@ app.get('/public/*', function (req, res, next) {
     res.sendFile(__dirname + '/public/' + req.params[0]);
 });
 
-app.listen(8082, function () {
-    console.log('Running server on port 8082!');
+const port = process.env.PORT || '3000';
+app.listen(port, function () {
+    console.log('Running server on port ' + port);
 });
