@@ -1,9 +1,9 @@
 const utils = require('../../utils');
 const stringSimilarity = require('string-similarity');
-const java = require("java");
+/*const java = require("java");
 java.classpath.push("src/bot/french-sentences-gen-1.0.jar");
 
-const SentenceGenerator = java.newInstanceSync("fr.klemek.fsg.SentenceGenerator");
+const SentenceGenerator = java.newInstanceSync("fr.klemek.fsg.SentenceGenerator");*/
 
 /**
  * Verify that the user didn't sent a command x seconds before
@@ -107,7 +107,7 @@ module.exports = {
                 .then(() => {
 
                     // Random message when bot is mentionned
-                    if (utils.getOption(client, msg.guild, 'replies') && msg.mentions.has(client.user)) {
+                    /*if (utils.getOption(client, msg.guild, 'replies') && msg.mentions.has(client.user)) {
                         let sentence = utils.fixString(SentenceGenerator.generateSync());
 
                         msg.channel.startTyping();
@@ -117,7 +117,7 @@ module.exports = {
                                 msg.channel.stopTyping();
                             });
                         }, sentence.length * 10);
-                    }
+                    }*/
 
                 })
                 .catch(d => spamMessage(msg, d, content));
