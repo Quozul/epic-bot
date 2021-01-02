@@ -1,11 +1,8 @@
 const Discord = require('discord.js');
 const fs = require('fs');
-const https = require('https');
-const express = require('express');
 const mysql = require('sync-mysql');
 const utils = require('./utils');
 const client = new Discord.Client();
-const app = express();
 
 client.config = JSON.parse(fs.readFileSync('config.json'));
 client.commands = new Discord.Collection();
