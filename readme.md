@@ -12,8 +12,6 @@ If you wish to invite the bot, [here's an invite link](https://discord.com/oauth
 
 Feel free to open an issue or a pull request to request new features.  
 
-My Discord: `Quozul#1174`.
-
 ## Installation
 * Clone the repository.
 * Run `npm i` to install dependencies.
